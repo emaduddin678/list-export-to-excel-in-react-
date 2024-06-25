@@ -84,7 +84,14 @@ const Test = ({data}) => {
 
   return (
     <div>
-      <button onClick={onDownload}> Export excel </button>
+      <button
+        type="button"
+        onClick={onDownload}
+        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+      >
+        {" "}
+        Export excel{" "}
+      </button>
 
       <table ref={tableRef}>
         <thead>
@@ -1381,7 +1388,7 @@ const Test = ({data}) => {
                     borderCollapse: "collapsea",
                   }}
                 >
-                  {index+1}
+                  {index + 1}
                 </td>
                 <td
                   style={{
@@ -1393,37 +1400,35 @@ const Test = ({data}) => {
                 </td>
                 <td
                   style={{
-                      border: "1pt solid black",
-                      borderCollapse: "collapsea",
-                    }}
-                    >
-                    {item.item_name}
+                    border: "1pt solid black",
+                    borderCollapse: "collapsea",
+                  }}
+                >
+                  {item.item_name}
                 </td>
                 <td
                   style={{
-                      border: "1pt solid black",
-                      borderCollapse: "collapsea",
-                    }}
-                    >
-                    {item.quantity}
-                  
+                    border: "1pt solid black",
+                    borderCollapse: "collapsea",
+                  }}
+                >
+                  {item.quantity}
                 </td>
                 <td
                   style={{
-                      border: "1pt solid black",
-                      borderCollapse: "collapsea",
-                    }}
-                    >
-                    {item.price}
-                  
+                    border: "1pt solid black",
+                    borderCollapse: "collapsea",
+                  }}
+                >
+                  {item.price}
                 </td>
                 <td
                   style={{
-                      border: "1pt solid black",
-                      borderCollapse: "collapsea",
-                    }}
-                    >
-                    {item.totalAmount}
+                    border: "1pt solid black",
+                    borderCollapse: "collapsea",
+                  }}
+                >
+                  {item.totalAmount}
                 </td>
                 <td
                   style={{
@@ -1439,7 +1444,7 @@ const Test = ({data}) => {
                     borderCollapse: "collapsea",
                   }}
                 >
-                    {item.ac}
+                  {item.ac}
                 </th>
                 <td
                   style={{
@@ -1447,7 +1452,7 @@ const Test = ({data}) => {
                     borderCollapse: "collapsea",
                   }}
                 >
-                    {item.remark}
+                  {item.remark}
                 </td>
               </tr>
             );
