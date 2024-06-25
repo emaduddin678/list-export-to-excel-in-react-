@@ -1,0 +1,29 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  text-align: center;
+}
+/* .studentInfo {
+  width: 1500px;
+  border-collapse: collapse;
+}
+
+.studentInfo td {
+  border: 1px solid black;
+}
+
+.studentInfo td:nth-child(even) {
+  background-color: #e4ffb7;
+}
+
+.studentInfo td:nth-child(odd) {
+  background-color: #efffd2;
+}
+
+.studentInfo tr:first-child td {
+  text-align: center;
+  font-weight: bolder;
+  background-color: #80b327;
+  color: white;
+} */
