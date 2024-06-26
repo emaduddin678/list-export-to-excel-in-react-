@@ -63,22 +63,16 @@ function App() {
   };
   const handelQuantity = (event) => {
     setSearchedItem((prev) => {
+
       return {
         ...prev,
         quantity: event.target.value,
         totalAmount: event.target.value * prev.price,
+        ac: (prev.acP * (event.target.value * prev.price)) / 100,
       };
     });
   };
-  const handelAcP = (event) => {
-    setSearchedItem((prev) => {
-      return {
-        ...prev,
-        acP: event.target.value,
-        ac: (event.target.value * prev.totalAmount) / 100,
-      };
-    });
-  };
+
   const handleRemark = (event) => {
     setSearchedItem((prev) => {
       return {
@@ -94,7 +88,7 @@ function App() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("hello");
+    // console.log("hello");
     if (Object.keys(searchedItem).length !== 0) {
       setAllProduct((prev) => [...prev, searchedItem]);
       setSearchTerm("");
@@ -102,8 +96,8 @@ function App() {
     }
   };
 
-  console.log(searchedItem);
-  console.log(allProduct);
+  // console.log(searchedItem);
+  // console.log(allProduct);
 
   //  useEffect(() => {
   //    const fetchData = async () => {
@@ -234,9 +228,14 @@ function App() {
           <input
             id="acP"
             type="text"
-            placeholder="0%"
-            // value={acP}
-            onChange={handelAcP}
+            placeholder="5%"
+            value={
+              Object.keys(searchedItem).length !== 0
+                ? `${searchedItem?.acP}%`
+                : "5%"
+            }
+            disabled
+            // onChange={handelAcP}
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
