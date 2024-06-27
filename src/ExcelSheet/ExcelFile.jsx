@@ -9,8 +9,8 @@ const Test = ({ data }) => {
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
-    filename: "Userstable",
-    sheet: "Users",
+    filename: "BOQ",
+    sheet: "BOQSheet",
   });
   // const data = [
   //   {
