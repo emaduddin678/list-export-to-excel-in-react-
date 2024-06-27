@@ -181,14 +181,15 @@ function App() {
             min={1}
             value={
               Object.keys(searchedItem).length !== 0
-                ? searchedItem.quantity
-                : ""
+              ? searchedItem.quantity
+              : ""
             }
             onChange={handelQuantity}
             placeholder="Enter Quantity..."
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
-          />
+            />
         </div>
+            {console.log(searchedItem.quantity)}
         <div className="col-span-full sm:col-span-2">
           <label htmlFor="unitRate" className="text-sm">
             Unit Rate
