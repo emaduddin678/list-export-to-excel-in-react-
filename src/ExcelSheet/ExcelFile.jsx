@@ -361,7 +361,7 @@ const Test = ({ data }) => {
             <th
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}
             >
-              {sumOfAgencyCommission}
+              {sumOfAgencyCommission+sumOfTotal}
             </th>
             <th
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}
