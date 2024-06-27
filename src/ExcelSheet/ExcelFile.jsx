@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDownloadExcel } from "react-export-table-to-excel";
 
-const Test = ({data}) => {
+const Test = ({ data }) => {
   const tableRef = useRef(null);
 
   const [sumOfTotal, setSumOfTotal] = useState(0);
@@ -86,6 +86,8 @@ const Test = ({data}) => {
   // ];
 
   useEffect(() => {
+    setSumOfTotal(0);
+    setSumOfAgencyCommission(0);
     data.forEach((dt) => {
       setSumOfTotal((prev) => prev + dt.totalAmount);
       setSumOfAgencyCommission((prev) => prev + dt.ac);

@@ -126,7 +126,7 @@ function App() {
             type="text"
             placeholder="Search..."
             value={
-              Object.keys(searchedItem).length !== 0
+              Object.keys(searchedItem).length !== 0 && !isFocused
                 ? searchedItem?.item_name
                 : searchTerm
             }
@@ -264,7 +264,11 @@ function App() {
             id="remark"
             type="text"
             placeholder="type a comment here..."
-            // value={remark}
+            value={
+              Object.keys(searchedItem).length !== 0
+                ? searchedItem.remark
+                : ""
+            }
             onChange={handleRemark}
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
