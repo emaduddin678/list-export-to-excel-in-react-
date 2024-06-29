@@ -6,12 +6,22 @@ import axios from "axios";
 // import ExportToExcel from "./ExcelSheet/ExcelFile";
 import Test from "./components/ExcelSheet/ExcelFile";
 import DashBoard from "./pages/dashboard/DashBoard";
+import { Route, Routes } from "react-router-dom";
+import Layout from "./pages/layout/Layout";
+import Login from "./pages/loginPage/Login";
 
 function App() {
-
   return (
     <>
-      <DashBoard />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Login />} />
+          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="dashboard" element={<DashBoard />} />
+          {/* <Route path="contact" element={<Contact />} /> */}
+          {/* <Route path="*" element={<ErrorPage />} /> */}
+        </Route>
+      </Routes>
     </>
   );
 }

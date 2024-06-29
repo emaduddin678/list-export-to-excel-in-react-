@@ -36,6 +36,9 @@ body.dark {
   --box3-color: #3a3b3c;
   --title-icon-color: #ccc;
 }
+
+
+
 /* === Custom Scroll Bar CSS === */
 ::-webkit-scrollbar {
   width: 8px;
@@ -109,14 +112,14 @@ nav .menu-items {
 .menu-items li {
   list-style: none;
 }
-.menu-items li a {
+.menu-items li div {
   display: flex;
   align-items: center;
   height: 50px;
   text-decoration: none;
   position: relative;
 }
-.nav-links li a:hover:before {
+.nav-links li div:hover:before {
   content: "";
   position: absolute;
   left: -7px;
@@ -125,37 +128,29 @@ nav .menu-items {
   border-radius: 50%;
   background-color: var(--primary-color);
 }
-body.dark li a:hover:before {
+body.dark li div:hover:before {
   background-color: var(--text-color);
 }
 
-.menu-items li a i {
-  font-size: 24px;
-  min-width: 45px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--black-light-color);
-}
-.menu-items li a .link-name {
+
+.menu-items li div .link-name {
   font-size: 18px;
   font-weight: 400;
   margin-left: 20px;
   color: var(--black-light-color);
   transition: var(--tran-05);
 }
-nav.close li a .link-name {
+nav.close li div .link-name {
   opacity: 0;
   display: none;
   pointer-events: none;
 }
-.nav-links li a:hover i,
-.nav-links li a:hover .link-name {
+
+.nav-links li div:hover .link-name {
   color: var(--primary-color);
 }
-body.dark .nav-links li a:hover i,
-body.dark .nav-links li a:hover .link-name {
+
+body.dark .nav-links li div:hover .link-name {
     color: var(--text-color);
 }
 .menu-items .logout-mode {
