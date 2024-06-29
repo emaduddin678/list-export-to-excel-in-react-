@@ -64,13 +64,7 @@ h2 {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-*:focus {
-  outline: none !important;
-}
 
-[type="text"] {
-  outline: none !important;
-}
 
 .input_field input:focus ~ label,
 .input_field input:valid ~ label {
@@ -96,4 +90,11 @@ h2 {
   color: #fff;
   border-color: #fff;
   background: rgba(255, 255, 255, 0.15);
+}
+
+.alertMessage {
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  margin-bottom: 20px;
 }

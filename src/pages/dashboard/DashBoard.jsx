@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const DashBoard = () => {
+  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     // Set initial mode based on localStorage
     const mode = localStorage.getItem("mode") || "light";
@@ -31,8 +33,167 @@ const DashBoard = () => {
     }
   };
 
+  const handleCreateBOQ = () => {
+    setModal(true);
+  };
+  const hanleFormSubmit = (e) => {
+    e.preventDefault();
+    navigate("/createboq");
+  };
+
   return (
-    <div>
+    <div className={`${modal && "relative h-screen overflow-hidden"}`}>
+      {modal && (
+        <div
+          className={`z-20 opacity-1 transition-all delay-300 bg-gray-900 absolute inset-0 flex justify-center items-center`}
+        >
+          <div className=" bg-black ">
+            <div className="relative p-4 w-full max-w-md max-h-full">
+              <div className="relative bg-black rounded-lg shadow ">
+                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                  <h3 className="text-lg font-semibold text-white ">
+                    Create New Product
+                  </h3>
+                  <button
+                    onClick={() => setModal(false)}
+                    type="button"
+                    className="bg-transparent hover:bg-gray-200  text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  "
+                    data-modal-toggle="crud-modal"
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Close modal</span>
+                  </button>
+                </div>
+
+                <form
+                  onSubmit={hanleFormSubmit}
+                  className="p-4 md:p-5 bg-black "
+                >
+                  <div className="grid gap-4 mb-4 grid-cols-2 bg-black ">
+                    <div className="col-span-2 bg-black ">
+                      <label
+                        htmlFor="name"
+                        className="block mb-2 text-sm font-medium text-white "
+                      >
+                        BOQ Title
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="bg-gray-50 border border-gray-300  text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        placeholder="Type project name..."
+                        required=""
+                      />
+                    </div>
+                    <div className="col-span-2 bg-black ">
+                      <label
+                        htmlFor="pName"
+                        className="block mb-2 text-sm font-medium text-white "
+                      >
+                        Provider user name
+                      </label>
+                      <input
+                        type="text"
+                        name="pName"
+                        id="pName"
+                        className="bg-gray-50 border border-gray-300  text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        placeholder="Type provider user name..."
+                        required=""
+                      />
+                    </div>
+                    <div className="col-span-2 sm:col-span-1">
+                      <label
+                        htmlFor="client Name"
+                        className="block mb-2 text-sm font-medium  text-white "
+                      >
+                        Client Name
+                      </label>
+                      <input
+                        type="text"
+                        name="client Name"
+                        id="client Name"
+                        className="bg-gray-50 border border-gray-300  text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        placeholder="Enter name..."
+                        required=""
+                      />
+                    </div>
+                    <div className="col-span-2 sm:col-span-1">
+                      <label
+                        htmlFor="ariaCircle"
+                        className="block mb-2 text-sm font-medium  text-white "
+                      >
+                        Aria Circle
+                      </label>
+                      <select
+                        id="ariaCircle"
+                        className="cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+                      >
+                        <option defaultValue="">Select Aria Circle</option>
+                        <option value="dhaka">Dhaka</option>
+                        <option value="chattogram">Chattogram</option>
+                        <option value="sylhet">Sylhet</option>
+                        <option value="khulna">Khulna</option>
+                        <option value="barishal">Barishal</option>
+                        <option value="rangpur">Rangpur</option>
+                        <option value="mymensingh">Mymensingh</option>
+                      </select>
+                    </div>
+
+                    {/* <div className="col-span-2">
+                      <label
+                        htmlFor="description"
+                        className="block mb-2 text-sm font-medium  text-white "
+                      >
+                        Product Description
+                      </label>
+                      <textarea
+                        id="description"
+                        rows="4"
+                        className="block p-2.5 w-full text-sm  text-white bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Write product description here"
+                      ></textarea>
+                    </div> */}
+                  </div>
+                  <button
+                    onClick={hanleFormSubmit}
+                    type="submit"
+                    className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                  >
+                    <svg
+                      className="me-1 -ms-1 w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                    Add new product
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <nav id="navId">
         <div className="logo-name">
           <div className="logo-image">
@@ -55,7 +216,9 @@ const DashBoard = () => {
                 >
                   <path d="M127.12,60.22,115.46,48.56h0L69,2.05a7,7,0,0,0-9.9,0L12.57,48.53h0L.88,60.22a3,3,0,0,0,4.24,4.24l6.57-6.57V121a7,7,0,0,0,7,7H46a7,7,0,0,0,7-7V81a1,1,0,0,1,1-1H74a1,1,0,0,1,1,1v40a7,7,0,0,0,7,7h27.34a7,7,0,0,0,7-7V57.92l6.54,6.54a3,3,0,0,0,4.24-4.24ZM110.34,121a1,1,0,0,1-1,1H82a1,1,0,0,1-1-1V81a7,7,0,0,0-7-7H54a7,7,0,0,0-7,7v40a1,1,0,0,1-1,1H18.69a1,1,0,0,1-1-1V51.9L63.29,6.29a1,1,0,0,1,1.41,0l45.63,45.63Z" />
                 </svg>
-                <Link to={"/"} className="link-name">Dashboard</Link>
+                <Link to={"/"} className="link-name">
+                  Dashboard
+                </Link>
               </div>
             </li>
             <li>
@@ -72,9 +235,9 @@ const DashBoard = () => {
                     fillRule="evenodd"
                   />
                 </svg>
-                <Link to={"/create-boq"} className="link-name">
+                <button onClick={handleCreateBOQ} className="link-name">
                   Create BOQ
-                </Link>
+                </button>
               </div>
             </li>
             <li>
@@ -94,7 +257,7 @@ const DashBoard = () => {
           </ul>
 
           <ul className="logout-mode">
-            <li>
+            {/* <li>
               <div style={{ cursor: "pointer" }}>
                 <svg
                   fill="#707070"
@@ -113,7 +276,7 @@ const DashBoard = () => {
 
                 <span className="link-name">Logout</span>
               </div>
-            </li>
+            </li> */}
             <li className="mode">
               <div style={{ cursor: "pointer" }}>
                 <svg
@@ -259,6 +422,24 @@ const DashBoard = () => {
                 <span className="data-list">Liked</span>
                 <span className="data-list">Liked</span>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="popup-outer">
+          <div className="popup-box">
+            <i id="close" className="bx bx-x close"></i>
+            <div className="profile-text">
+              {/* <!--<img src="profile.jpg" alt="">--> */}
+              <div className="text">
+                <span className="name">Prem Shahi</span>
+                <span className="profession">Web & App Designer</span>
+              </div>
+            </div>
+            <div className="button">
+              <button id="close" className="cancel">
+                Cancel
+              </button>
+              <button className="send">Send</button>
             </div>
           </div>
         </div>

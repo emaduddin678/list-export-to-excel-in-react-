@@ -9,17 +9,19 @@ import DashBoard from "./pages/dashboard/DashBoard";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/layout/Layout";
 import Login from "./pages/loginPage/Login";
+import HistoryPage from "./pages/historyPage/HistoryPage";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/">
           <Route index element={<Login />} />
-          <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="dashboard" element={<DashBoard />} />
-          {/* <Route path="contact" element={<Contact />} /> */}
-          {/* <Route path="*" element={<ErrorPage />} /> */}
+          <Route>
+            <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="history" element={<HistoryPage />} />
+            {/* <Route path="*" element={<ErrorPage />} /> */}
+          </Route>
         </Route>
       </Routes>
     </>
