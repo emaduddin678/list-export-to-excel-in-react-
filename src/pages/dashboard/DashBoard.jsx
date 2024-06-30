@@ -38,7 +38,7 @@ const DashBoard = () => {
   };
   const hanleFormSubmit = (e) => {
     e.preventDefault();
-    navigate("/createboq");
+    navigate("createboq");
   };
 
   return (

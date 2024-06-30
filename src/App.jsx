@@ -10,6 +10,8 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/layout/Layout";
 import Login from "./pages/loginPage/Login";
 import HistoryPage from "./pages/historyPage/HistoryPage";
+import SearchInput from './components/SearchInput/SearchInput';
+import ErrorPage from "./pages/error/ErrorPage";
 
 function App() {
   return (
@@ -17,12 +19,13 @@ function App() {
       <Routes>
         <Route path="/">
           <Route index element={<Login />} />
-          <Route>
-            <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/dashboard">
+            <Route index element={<DashBoard />} />
+            <Route path="/createboq" element={<SearchInput />} />
             <Route path="history" element={<HistoryPage />} />
-            {/* <Route path="*" element={<ErrorPage />} /> */}
           </Route>
         </Route>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
   );
