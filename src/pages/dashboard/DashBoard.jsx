@@ -4,6 +4,13 @@ import { useAuth } from "../../context/AuthContext";
 
 const DashBoard = () => {
   const [modal, setModal] = useState(false);
+  const [error, setError] = useState(false);
+  const [projectInfo, setProjectInfo] = useState({
+    projectTitle: "",
+    userName: "",
+    clientName: "",
+    ariaCircle: "",
+  });
   const user = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
@@ -38,14 +45,44 @@ const DashBoard = () => {
   const handleCreateBOQ = () => {
     setModal(true);
   };
+  const handleFormInput = (e) => {
+    setProjectInfo((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+  const validateProjectInfo = () => {
+    const { projectTitle, userName, clientName, ariaCircle } = projectInfo;
+    if (
+      projectTitle === "" ||
+      userName === "" ||
+      clientName === "" ||
+      ariaCircle === ""
+    ) {
+      console.log("helo");
+      setError(true);
+      return false;
+    }
+    setError(false);
+    return true;
+  };
   const hanleFormSubmit = (e) => {
     e.preventDefault();
-    navigate("createboq");
+    if (validateProjectInfo()) {
+      // Proceed with form submission or other logic
+      navigate("createboq");
+      console.log("Form is valid. Submitting...");
+    } else {
+      console.log("Form is invalid. Please fill out all fields.");
+    }
   };
 
   const handleLogout = () => {
     user.logout();
   };
+  console.log(projectInfo);
 
   return (
     <div className={`${modal && "relative h-screen overflow-hidden"}`}>
@@ -99,9 +136,15 @@ const DashBoard = () => {
                       </label>
                       <input
                         type="text"
-                        name="name"
+                        name="projectTitle"
+                        onChange={handleFormInput}
+                        value={projectInfo.projectTitle}
                         id="name"
-                        className="bg-gray-50 border border-gray-300  text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        className={`${
+                          projectInfo.projectTitle !== "" && error
+                            ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        }`}
                         placeholder="Type project name..."
                         required=""
                       />
@@ -115,9 +158,15 @@ const DashBoard = () => {
                       </label>
                       <input
                         type="text"
-                        name="pName"
+                        name="userName"
+                        onChange={handleFormInput}
+                        value={projectInfo.userName}
                         id="pName"
-                        className="bg-gray-50 border border-gray-300  text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        className={`${
+                          projectInfo.userName !== "" && error
+                            ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        }`}
                         placeholder="Type provider user name..."
                         required=""
                       />
@@ -129,11 +178,18 @@ const DashBoard = () => {
                       >
                         Client Name
                       </label>
+                      {console.log(error)}
                       <input
                         type="text"
-                        name="client Name"
+                        name="clientName"
+                        onChange={handleFormInput}
+                        value={projectInfo.clientName}
                         id="client Name"
-                        className="bg-gray-50 border border-gray-300  text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        className={`${
+                          projectInfo.clientName !== "" && error
+                            ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        }`}
                         placeholder="Enter name..."
                         required=""
                       />
@@ -147,7 +203,15 @@ const DashBoard = () => {
                       </label>
                       <select
                         id="ariaCircle"
-                        className="cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+                        name="ariaCircle"
+                        onChange={handleFormInput}
+                        value={projectInfo.ariaCircle}
+                        className={`${
+                          projectInfo.ariaCircle !== "" && error
+                            ? "cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+                            : " border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 cursor-pointer focus:ring-primary-500 focus:border-primary-500 "
+                        }`}
+                        // className="cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                       >
                         <option defaultValue="">Select Aria Circle</option>
                         <option value="dhaka">Dhaka</option>
@@ -357,8 +421,8 @@ const DashBoard = () => {
             <div className="boxes">
               <div className="box box1">
                 <i className="uil uil-thumbs-up"></i>
-                <span className="text">Total Likes</span>
-                <span className="number">50,120</span>
+                <span className="text">Total Projects</span>
+                <span className="number">512</span>
               </div>
               <div className="box box2">
                 <i className="uil uil-comments"></i>
@@ -380,23 +444,23 @@ const DashBoard = () => {
             <div className="activity-data">
               <div className="data names">
                 <span className="data-title">Name</span>
-                <span className="data-list">Prem Shahi</span>
-                <span className="data-list">Deepa Chand</span>
-                <span className="data-list">Manisha Chand</span>
-                <span className="data-list">Pratima Shahi</span>
-                <span className="data-list">Man Shahi</span>
-                <span className="data-list">Ganesh Chand</span>
-                <span className="data-list">Bikash Chand</span>
+                <span className="data-list">project name</span>
+                <span className="data-list">project name</span>
+                <span className="data-list">project name</span>
+                <span className="data-list">project name</span>
+                <span className="data-list">project name</span>
+                <span className="data-list">project name</span>
+                <span className="data-list">project name</span>
               </div>
               <div className="data email">
                 <span className="data-title">Email</span>
-                <span className="data-list">premshahi@gmail.com</span>
-                <span className="data-list">deepachand@gmail.com</span>
-                <span className="data-list">prakashhai@gmail.com</span>
-                <span className="data-list">manishachand@gmail.com</span>
-                <span className="data-list">pratimashhai@gmail.com</span>
-                <span className="data-list">manshahi@gmail.com</span>
-                <span className="data-list">ganeshchand@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
+                <span className="data-list">projectname@gmail.com</span>
               </div>
               <div className="data joined">
                 <span className="data-title">Joined</span>
@@ -428,24 +492,6 @@ const DashBoard = () => {
                 <span className="data-list">Liked</span>
                 <span className="data-list">Liked</span>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="popup-outer">
-          <div className="popup-box">
-            <i id="close" className="bx bx-x close"></i>
-            <div className="profile-text">
-              {/* <!--<img src="profile.jpg" alt="">--> */}
-              <div className="text">
-                <span className="name">Prem Shahi</span>
-                <span className="profession">Web & App Designer</span>
-              </div>
-            </div>
-            <div className="button">
-              <button id="close" className="cancel">
-                Cancel
-              </button>
-              <button className="send">Send</button>
             </div>
           </div>
         </div>
