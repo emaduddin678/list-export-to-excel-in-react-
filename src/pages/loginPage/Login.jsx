@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import classes from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const user = useAuth();
+  // console.log(user);
 
   const handleChange = (e) => {
     setUserInfo((prev) => ({
@@ -16,10 +19,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(false);
-    if (
-      import.meta.env.VITE_USER_EMAIL === userInfo.email &&
-      import.meta.env.VITE_USER_PASSWORD === userInfo.password
-    ) {
+    if (user.login(userInfo.email, userInfo.password) === "success") {
       navigate("/dashboard");
     } else {
       setError(true);

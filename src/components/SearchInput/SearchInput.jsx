@@ -1,4 +1,7 @@
-import React from 'react'
+import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react'
+import Test from '../ExcelSheet/ExcelFile';
+import axios from 'axios';
 
 const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,11 +40,13 @@ const SearchInput = () => {
     }
   };
 
+
+  console.log(searchTerm)
   // Queries
   const { data, error } = useQuery({
     queryKey: ["searchTerm", searchTerm],
     queryFn: async () => {
-      // console.log("hello");
+      console.log("hello");
       const response = await axios.get(
         `https://boq-backend.xri.com.bd/search-by-item-name/${searchTerm}`
       );
@@ -182,7 +187,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        {console.log(searchedItem.quantity)}
+        {/* {console.log(searchedItem.quantity)} */}
         <div className="col-span-full sm:col-span-2">
           <label htmlFor="unitRate" className="text-sm">
             Unit Rate
