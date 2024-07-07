@@ -135,10 +135,10 @@ const SearchInput = () => {
   //    fetchData();
   //  }, []);
   return (
-    <div>
-      <form className="searchField flex gap-2 justify-between items-end">
-        <div className="col-span-full sm:col-span-2">
-          <label htmlFor="itName" className="text-sm">
+    <div className="mt-2">
+      <form className="searchField flex gap-2 justify-between items-end ">
+        <div className="flex flex-col items-center font-medium">
+          <label htmlFor="itName" className="text-sm ">
             Item Name
           </label>
           <input
@@ -150,7 +150,9 @@ const SearchInput = () => {
               Object.keys(searchedItem).length !== 0 && !isFocused
                 ? searchedItem?.item_name
                 : Number.isInteger(searchTerm)
-                ? !isFocused? "Search..." : ""
+                ? !isFocused
+                  ? "Search..."
+                  : ""
                 : searchTerm
             }
             onChange={handleInputChange}
@@ -178,7 +180,7 @@ const SearchInput = () => {
             </ul>
           )}
         </div>
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="itCode" className="text-sm">
             Item Code
           </label>
@@ -201,7 +203,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="itQuantity" className="text-sm">
             Quantity
           </label>
@@ -220,7 +222,7 @@ const SearchInput = () => {
           />
         </div>
         {/* {console.log(searchedItem.quantity)} */}
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="unitRate" className="text-sm">
             Unit Rate
           </label>
@@ -236,7 +238,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="totalRate" className="text-sm">
             Total Amount
           </label>
@@ -252,7 +254,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="acP" className="text-sm">
             AC %
           </label>
@@ -270,7 +272,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="ac" className="text-sm">
             AC
           </label>
@@ -287,7 +289,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        <div className="col-span-full sm:col-span-2">
+        <div className="flex flex-col items-center font-medium">
           <label htmlFor="remark" className="text-sm">
             Remark
           </label>

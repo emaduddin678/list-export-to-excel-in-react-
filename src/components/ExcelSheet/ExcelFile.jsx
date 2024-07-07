@@ -146,7 +146,7 @@ const Test = ({}) => {
   // console.log("🚀 ~ agencycommisio:", agencyCommisionRow);
 
   return (
-    <div>
+    <div className="flex justify-center flex-col items-center gap-4 mt-10">
       <button
         type="button"
         onClick={onDownload}
@@ -185,7 +185,7 @@ const Test = ({}) => {
             </th>
             <th
               style={{
-                width: "75px",
+                width: "100px",
                 border: "1pt solid black",
                 borderCollapse: "collapsea",
               }}
@@ -194,7 +194,7 @@ const Test = ({}) => {
             </th>
             <th
               style={{
-                width: "225px",
+                width: "300px",
                 border: "1pt solid black",
                 borderCollapse: "collapsea",
               }}
@@ -262,6 +262,7 @@ const Test = ({}) => {
               <tr key={index}>
                 <td
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
@@ -270,6 +271,7 @@ const Test = ({}) => {
                 </td>
                 <td
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
@@ -286,6 +288,7 @@ const Test = ({}) => {
                 </td>
                 <td
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
@@ -294,6 +297,7 @@ const Test = ({}) => {
                 </td>
                 <td
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
@@ -302,6 +306,7 @@ const Test = ({}) => {
                 </td>
                 <td
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
@@ -310,6 +315,7 @@ const Test = ({}) => {
                 </td>
                 <td
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
@@ -318,6 +324,7 @@ const Test = ({}) => {
                 </td>
                 <th
                   style={{
+                    textAlign: "center",
                     border: "1pt solid black",
                     borderCollapse: "collapsea",
                   }}
