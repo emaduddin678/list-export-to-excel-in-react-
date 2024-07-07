@@ -1,90 +1,128 @@
-import React, { useEffect, useRef, useState } from "react";
+import isEqual from "lodash.isequal";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDownloadExcel } from "react-export-table-to-excel";
 
-const Test = ({ data }) => {
+const Test = ({}) => {
   const tableRef = useRef(null);
 
   const [sumOfTotal, setSumOfTotal] = useState(0);
   const [sumOfAgencyCommission, setSumOfAgencyCommission] = useState(0);
+  const [agencyCommisionRow, setAgencyCommisionRow] = useState([]);
+  // let agencyCommisionRow;
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
-    filename: "BOQ",
+    filename: `${"he"}`,
     sheet: "BOQSheet",
   });
-  // const data = [
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: 0,
-  //     totalAmount: 230,
-  //     acP: 5,
-  //     ac: 20,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 202,
-  //     item_code: "40016009",
-  //     item_name: "T-SHIRT OPTION 4_CEILING_201-500",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 145,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: 0,
-  //     totalAmount: 4320,
-  //     acP: 5,
-  //     ac: 420,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 206,
-  //     item_code: "40015939",
-  //     item_name: "ITEM: POLO SHIRT: WHITE_CEILING_201-500",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 280,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: 0,
-  //     totalAmount: 2330,
-  //     acP: 5,
-  //     ac: 230,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 207,
-  //     item_code: "40015949",
-  //     item_name: "POLO SHIRT OPTION 1_CEILING_201-500",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 230,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: 0,
-  //     totalAmount: 4230,
-  //     acP: 5,
-  //     ac: 640,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 208,
-  //     item_code: "40015977",
-  //     item_name: "POLO SHIRT OPTION 6_CEILING_ABOVE 3000",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 220,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: 0,
-  //     totalAmount: 2340,
-  //     acP: 5,
-  //     ac: 630,
-  //     remark: "",
-  //   },
-  // ];
 
+  const data = [
+    {
+      id: 199,
+      item_code: "40015023",
+      item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
+      supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
+      price: 270,
+      contact: "17318",
+      currency: "BDT",
+      quantity: "2",
+      totalAmount: 1000,
+      acP: 6,
+      ac: 60,
+      remark: "",
+    },
+    {
+      id: 199,
+      item_code: "40015023",
+      item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
+      supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
+      price: 270,
+      contact: "17318",
+      currency: "BDT",
+      quantity: "2",
+      totalAmount: 1000,
+      acP: 7,
+      ac: 70,
+      remark: "",
+    },
+    {
+      id: 199,
+      item_code: "40015023",
+      item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
+      supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
+      price: 270,
+      contact: "17318",
+      currency: "BDT",
+      quantity: "2",
+      totalAmount: 1000,
+      acP: 8,
+      ac: 80,
+      remark: "",
+    },
+    {
+      id: 199,
+      item_code: "40015023",
+      item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
+      supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
+      price: 270,
+      contact: "17318",
+      currency: "BDT",
+      quantity: "2",
+      totalAmount: 1000,
+      acP: 6,
+      ac: 60,
+      remark: "",
+    },
+    {
+      id: 199,
+      item_code: "40015023",
+      item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
+      supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
+      price: 270,
+      contact: "17318",
+      currency: "BDT",
+      quantity: "2",
+      totalAmount: 1000,
+      acP: 7,
+      ac: 70,
+      remark: "",
+    },
+    {
+      id: 199,
+      item_code: "40015023",
+      item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
+      supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
+      price: 270,
+      contact: "17318",
+      currency: "BDT",
+      quantity: "2",
+      totalAmount: 1000,
+      acP: 8,
+      ac: 80,
+      remark: "",
+    },
+  ];
+  function findAllElements(arr) {
+    const elementGroups = {};
+    const result = [];
+
+    // Group elements by acP value
+    arr.forEach((item) => {
+      if (elementGroups[item.acP]) {
+        elementGroups[item.acP].push(item);
+      } else {
+        elementGroups[item.acP] = [item];
+      }
+    });
+
+    // Push all grouped elements into the result array
+    for (let key in elementGroups) {
+      result.push(elementGroups[key]);
+    }
+
+    // console.log(result);
+    setAgencyCommisionRow(result);
+  }
   useEffect(() => {
     setSumOfTotal(0);
     setSumOfAgencyCommission(0);
@@ -94,7 +132,18 @@ const Test = ({ data }) => {
     });
   }, [data]);
 
-  console.log("🚀 ~ sumOfTotal:", sumOfTotal);
+  const prevDataRef = useRef();
+
+  const memoizedData = useMemo(() => data, [data]);
+
+  useEffect(() => {
+    if (!isEqual(prevDataRef.current, memoizedData)) {
+      findAllElements(memoizedData);
+      prevDataRef.current = memoizedData; // Update previous data
+    }
+  }, [memoizedData]);
+
+  // console.log("🚀 ~ agencycommisio:", agencyCommisionRow);
 
   return (
     <div>
@@ -210,7 +259,7 @@ const Test = ({ data }) => {
 
           {data.map((item, index) => {
             return (
-              <tr key={item.item_code}>
+              <tr key={index}>
                 <td
                   style={{
                     border: "1pt solid black",
@@ -311,7 +360,7 @@ const Test = ({ data }) => {
             ></th>
           </tr>
 
-          <tr>
+          {/* <tr>
             <td
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}
             ></td>
@@ -349,7 +398,91 @@ const Test = ({ data }) => {
             <th
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}
             ></th>
-          </tr>
+          </tr> */}
+
+          {agencyCommisionRow &&
+            agencyCommisionRow.map((row, index) => {
+              return (
+                <tr key={index}>
+                  <td
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  ></td>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  >
+                    40016081
+                  </th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  >
+                    Agency Commission{" "}
+                  </th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  >
+                    {row.reduce(
+                      (accumulator, currentValue) =>
+                        accumulator + currentValue.totalAmount,
+                      0
+                    )}
+                  </th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  >
+                    {row[0].acP / 100}
+                  </th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  >
+                    {(
+                      row.reduce(
+                        (accumulator, currentValue) =>
+                          accumulator + currentValue.totalAmount,
+                        0
+                      ) *
+                      (row[0].acP / 100)
+                    ).toFixed(2)}
+                  </th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  ></th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  ></th>
+                  <th
+                    style={{
+                      border: "1pt solid black",
+                      borderCollapse: "collapsea",
+                    }}
+                  ></th>
+                </tr>
+              );
+            })}
+
           <tr>
             <th
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}
@@ -361,7 +494,7 @@ const Test = ({ data }) => {
             <th
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}
             >
-              {sumOfAgencyCommission+sumOfTotal}
+              {sumOfAgencyCommission + sumOfTotal}
             </th>
             <th
               style={{ border: "1pt solid black", borderCollapse: "collapsea" }}

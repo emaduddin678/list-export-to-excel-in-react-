@@ -19,7 +19,7 @@ function App() {
     <>
       <Routes>
         <Route path="/">
-          <Route index element={<Login />} />
+          <Route index element={<SearchInput />} />
           {/* <Route index element={<DashBoard />} /> */}
           <Route path="/dashboard">
             <Route

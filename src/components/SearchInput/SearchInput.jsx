@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react'
-import Test from '../ExcelSheet/ExcelFile';
-import axios from 'axios';
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import Test from "../ExcelSheet/ExcelFile";
+import axios from "axios";
 
 const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,25 +40,47 @@ const SearchInput = () => {
     }
   };
 
-
-  console.log(searchTerm)
+  // console.log(typeof searchTerm);
   // Queries
   const { data, error } = useQuery({
     queryKey: ["searchTerm", searchTerm],
     queryFn: async () => {
-      console.log("hello");
       const response = await axios.get(
-        `https://boq-backend.xri.com.bd/search-by-item-name/${searchTerm}`
+        `https://boq-backend.xri.com.bd/search-by-item-${
+          Number.isInteger(searchTerm) ? "code" : "name"
+        }/${searchTerm}`
       );
 
       return response.data;
     },
     enabled: !!searchTerm,
   });
+  // const { data, error } = useQuery({
+  //   queryKey: ["searchTerm", searchTerm],
+  //   queryFn: async () => {
+  //     console.log("hello");
+  //     const response = await axios.get(
+  //       `https://boq-backend.xri.com.bd/search-by-item-code/${searchTerm}`
+  //     );
+
+  //     return response.data;
+  //   },
+  //   enabled: !!searchTerm,
+  // });
   // console.log(data);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+  const handleInputChangeNumber = (event) => {
+    setSearchTerm(0);
+    setSearchTerm(Number(event.target.value));
+
+    // console.log(event.target.value)
+    if (event.target.value === "") {
+      console.log("Helo");
+      setSearchTerm("");
+    }
   };
   const handelQuantity = (event) => {
     setSearchedItem((prev) => {
@@ -122,10 +144,13 @@ const SearchInput = () => {
           <input
             id="itName"
             type="text"
+            name="itName"
             placeholder="Search..."
             value={
               Object.keys(searchedItem).length !== 0 && !isFocused
                 ? searchedItem?.item_name
+                : Number.isInteger(searchTerm)
+                ? !isFocused? "Search..." : ""
                 : searchTerm
             }
             onChange={handleInputChange}
@@ -136,17 +161,18 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75  "
           />
           {isFocused && data && (
-            <ul className="absolute z-50 bg-white border border-gray-300 w-1/5 rounded-md mt-1">
+            <ul className="absolute z-50 bg-white border border-gray-300 w-1/3 rounded-md mt-1">
               {data.map((item, index) => (
                 <li
                   key={index}
-                  className={`p-2 cursor-pointer flex justify-start ${
+                  className={`p-2 cursor-pointer flex justify-between items-center ${
                     highlightedIndex === index ? "bg-gray-200" : ""
                   }`}
                   onMouseDown={() => handleItemClick(item)} // Use onMouseDown to avoid blur event
                   onMouseEnter={() => setHighlightedIndex(index)}
                 >
                   <span>{item.item_name} </span>
+                  <span>{item.item_code} </span>
                 </li>
               ))}
             </ul>
@@ -158,12 +184,18 @@ const SearchInput = () => {
           </label>
           <input
             id="itCode"
-            type="text"
-            disabled
+            type="number"
+            // disabled
+            name="itCode"
+            onChange={handleInputChangeNumber}
+            onFocus={() => setIsFocused(true)}
+            onKeyDown={handleKeyDown}
+            onBlur={() => setIsFocused(false)}
+            autoComplete="off"
             value={
-              Object.keys(searchedItem).length !== 0
-                ? searchedItem.item_code
-                : "Item Code"
+              Object.keys(searchedItem).length !== 0 && !isFocused
+                ? searchedItem?.item_code
+                : searchTerm
             }
             placeholder="Item Code"
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
@@ -281,6 +313,6 @@ const SearchInput = () => {
       <Test data={allProduct} />
     </div>
   );
-}
+};
 
-export default SearchInput
+export default SearchInput;
