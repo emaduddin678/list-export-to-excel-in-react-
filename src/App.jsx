@@ -19,15 +19,15 @@ function App() {
     <>
       <Routes>
         <Route path="/">
-          <Route index element={<SearchInput />} />
-          {/* <Route index element={<DashBoard />} /> */}
+          <Route index element={<Login />} />
           <Route path="/dashboard">
+            {/* <Route index element={<DashBoard />} /> */}
             <Route
               index
               element={
-                <PrivateRoute>
-                  <DashBoard />
-                </PrivateRoute>
+                <DashBoard />
+                // <PrivateRoute>
+                // </PrivateRoute>
               }
             />
             <Route

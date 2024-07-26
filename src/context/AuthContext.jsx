@@ -12,21 +12,18 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(false);
 
   // login function
-  function login(email, password) {
-    if (
-      import.meta.env.VITE_USER_EMAIL === email &&
-      import.meta.env.VITE_USER_PASSWORD === password
-    ) {
+  function login(msg) {
+    if (msg === "Login Successful") {
       setCurrentUser(true);
-      return "success";
+      return true;
     } else {
-      return "failed";
+      return false;
     }
   }
 
   //logout function
   function logout() {
-    setCurrentUser(false)
+    setCurrentUser(false);
   }
 
   const value = {
