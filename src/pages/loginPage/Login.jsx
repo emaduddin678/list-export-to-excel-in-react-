@@ -40,9 +40,6 @@ const Login = () => {
         if (response.status === 200 && user.login(response.data.message)) {
           navigate("/dashboard");
         }
-        // if(response.status !== 200){
-
-        // }
       })
       .catch((error) => {
         setError(true);

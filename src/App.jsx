@@ -25,8 +25,8 @@ function App() {
             <Route
               index
               element={
-                <DashBoard />
                 // <PrivateRoute>
+                  <DashBoard />
                 // </PrivateRoute>
               }
             />

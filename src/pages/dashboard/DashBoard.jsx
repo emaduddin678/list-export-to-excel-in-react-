@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { isRouteErrorResponse, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import CreateBoqPopUp from "../../components/createBoqPopUp/CreateBoqPopUp";
+import ClientManagement from "../../components/clientManagement/ClientManagement";
+import CreateClientPopUp from "../../components/createClientPopUp/CreatClientPopUp";
 
 const DashBoard = () => {
-  const [modal, setModal] = useState(false);
-  const [error, setError] = useState(false);
-  const [projectInfo, setProjectInfo] = useState({
-    projectTitle: "",
-    userName: "",
-    clientName: "",
-    ariaCircle: "",
-  });
+  const [createBoqModal, setCreateBoqModal] = useState(false);
+  const [createClientModal, setCreateClientModal] = useState(false);
+  const [clientManagement, setClientManagement] = useState(false);
+
   const user = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,227 +42,28 @@ const DashBoard = () => {
     }
   };
 
-  const handleCreateBOQ = () => {
-    setModal(true);
-  };
-  const handleFormInput = (e) => {
-    setProjectInfo((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
-  const validateProjectInfo = () => {
-    const { projectTitle, userName, clientName, ariaCircle } = projectInfo;
-    if (
-      projectTitle === "" ||
-      userName === "" ||
-      clientName === "" ||
-      ariaCircle === ""
-    ) {
-      console.log("helo");
-      setError(true);
-      return false;
-    }
-    setError(false);
-    return true;
-  };
-  const hanleFormSubmit = (e) => {
-    e.preventDefault();
-    if (validateProjectInfo()) {
-      // Proceed with form submission or other logic
-      navigate("createboq");
-      console.log("Form is valid. Submitting...");
-    } else {
-      console.log("Form is invalid. Please fill out all fields.");
-    }
-  };
-
   const handleLogout = () => {
     user.logout();
   };
-  console.log(projectInfo);
+  const handleCreateBOQ = () => {
+    setCreateBoqModal(true);
+  };
+  const handleCloseBOQ = () => {
+    setCreateBoqModal(false);
+  };
+  const handleOpenClient = () => {
+    // console.log("this is calling from client management");
+    setCreateClientModal(true);
+  };
+  const handleCloseClient = () => {
+    setCreateClientModal(false);
+  };
 
   return (
-    <div className={`${modal && "relative h-screen overflow-hidden"}`}>
-      {modal && (
-        <div
-          className={`z-20 opacity-1 transition-all delay-300 bg-gray-900 absolute inset-0 flex justify-center items-center`}
-        >
-          <div className=" bg-black ">
-            <div className="relative p-4 w-full max-w-md max-h-full">
-              <div className="relative bg-black rounded-lg shadow ">
-                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                  <h3 className="text-lg font-semibold text-white ">
-                    Create New Product
-                  </h3>
-                  <button
-                    onClick={() => setModal(false)}
-                    type="button"
-                    className="bg-transparent hover:bg-gray-200  text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  "
-                    data-modal-toggle="crud-modal"
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                  </button>
-                </div>
-
-                <form
-                  onSubmit={hanleFormSubmit}
-                  className="p-4 md:p-5 bg-black "
-                >
-                  <div className="grid gap-4 mb-4 grid-cols-2 bg-black ">
-                    <div className="col-span-2 bg-black ">
-                      <label
-                        htmlFor="name"
-                        className="block mb-2 text-sm font-medium text-white "
-                      >
-                        BOQ Title
-                      </label>
-                      <input
-                        type="text"
-                        name="projectTitle"
-                        onChange={handleFormInput}
-                        value={projectInfo.projectTitle}
-                        id="name"
-                        className={`${
-                          projectInfo.projectTitle !== "" && error
-                            ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        }`}
-                        placeholder="Type project name..."
-                        required=""
-                      />
-                    </div>
-                    <div className="col-span-2 bg-black ">
-                      <label
-                        htmlFor="pName"
-                        className="block mb-2 text-sm font-medium text-white "
-                      >
-                        Provider user name
-                      </label>
-                      <input
-                        type="text"
-                        name="userName"
-                        onChange={handleFormInput}
-                        value={projectInfo.userName}
-                        id="pName"
-                        className={`${
-                          projectInfo.userName !== "" && error
-                            ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        }`}
-                        placeholder="Type provider user name..."
-                        required=""
-                      />
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                      <label
-                        htmlFor="client Name"
-                        className="block mb-2 text-sm font-medium  text-white "
-                      >
-                        Client Name
-                      </label>
-                      {console.log(error)}
-                      <input
-                        type="text"
-                        name="clientName"
-                        onChange={handleFormInput}
-                        value={projectInfo.clientName}
-                        id="client Name"
-                        className={`${
-                          projectInfo.clientName !== "" && error
-                            ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        }`}
-                        placeholder="Enter name..."
-                        required=""
-                      />
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                      <label
-                        htmlFor="ariaCircle"
-                        className="block mb-2 text-sm font-medium  text-white "
-                      >
-                        Aria Circle
-                      </label>
-                      <select
-                        id="ariaCircle"
-                        name="ariaCircle"
-                        onChange={handleFormInput}
-                        value={projectInfo.ariaCircle}
-                        className={`${
-                          projectInfo.ariaCircle !== "" && error
-                            ? "cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                            : " border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 cursor-pointer focus:ring-primary-500 focus:border-primary-500 "
-                        }`}
-                        // className="cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                      >
-                        <option defaultValue="">Select Aria Circle</option>
-                        <option value="dhaka">Dhaka</option>
-                        <option value="chattogram">Chattogram</option>
-                        <option value="sylhet">Sylhet</option>
-                        <option value="khulna">Khulna</option>
-                        <option value="barishal">Barishal</option>
-                        <option value="rangpur">Rangpur</option>
-                        <option value="mymensingh">Mymensingh</option>
-                      </select>
-                    </div>
-
-                    {/* <div className="col-span-2">
-                      <label
-                        htmlFor="description"
-                        className="block mb-2 text-sm font-medium  text-white "
-                      >
-                        Product Description
-                      </label>
-                      <textarea
-                        id="description"
-                        rows="4"
-                        className="block p-2.5 w-full text-sm  text-white bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Write product description here"
-                      ></textarea>
-                    </div> */}
-                  </div>
-                  <button
-                    onClick={hanleFormSubmit}
-                    type="submit"
-                    className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                  >
-                    <svg
-                      className="me-1 -ms-1 w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                    Add new product
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className={`${createBoqModal && "relative h-screen overflow-hidden"}`}>
+      {createBoqModal && <CreateBoqPopUp handleCloseBOQ={handleCloseBOQ} />}
+      {createClientModal && (
+        <CreateClientPopUp handleCloseClient={handleCloseClient} />
       )}
       <nav id="navId">
         <div className="logo-name">
@@ -322,6 +123,31 @@ const DashBoard = () => {
                   <path d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z" />
                 </svg>
                 <span className="link-name">History</span>
+              </div>
+            </li>
+            <li>
+              <div style={{ cursor: "pointer" }}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M7.1607 7.73404C7.1607 5.03401 9.33029 2.85062 12 2.85062C14.6697 2.85062 16.8393 5.03401 16.8393 7.73404C16.8393 8.70559 16.5884 10.1591 15.8525 11.3492C15.1294 12.5184 13.9408 13.4366 12.0052 13.4099C11.7981 13.407 11.6279 13.5726 11.625 13.7796C11.6222 13.9867 11.7877 14.1569 11.9948 14.1598C14.2306 14.1907 15.6491 13.1039 16.4904 11.7436C16.8956 11.0883 17.1674 10.3704 17.3393 9.68278V9.75097C17.3393 9.95807 17.5072 10.126 17.7143 10.126C17.9214 10.126 18.0893 9.95807 18.0893 9.75097V7.73404C18.0893 7.52693 17.9214 7.35904 17.7143 7.35904C17.6664 7.35904 17.6207 7.36799 17.5787 7.38431C17.3995 4.43855 14.9731 2.10062 12 2.10062C9.02688 2.10062 6.60042 4.43855 6.4213 7.38431C6.37924 7.36799 6.33351 7.35904 6.2857 7.35904C6.07859 7.35904 5.9107 7.52693 5.9107 7.73404V9.75097C5.9107 9.95807 6.07859 10.126 6.2857 10.126C6.4928 10.126 6.6607 9.95807 6.6607 9.75097V8.0877C6.69979 8.10152 6.74187 8.10904 6.7857 8.10904C6.9928 8.10904 7.1607 7.94115 7.1607 7.73404ZM11.9999 11.306C13.7889 11.306 15.2499 9.84178 15.2499 8.02219C15.2499 6.20259 13.7889 4.73833 11.9999 4.73833C10.2109 4.73833 8.74992 6.20259 8.74992 8.02219C8.74992 9.84178 10.2109 11.306 11.9999 11.306ZM11.9999 12.056C14.2091 12.056 15.9999 10.25 15.9999 8.02219C15.9999 5.79435 14.2091 3.98833 11.9999 3.98833C9.79078 3.98833 7.99992 5.79435 7.99992 8.02219C7.99992 10.25 9.79078 12.056 11.9999 12.056ZM17.1762 16.1952H6.82364C5.67837 16.1952 4.74994 17.1236 4.74994 18.2689V20.2858C4.74994 20.7627 5.13656 21.1494 5.61348 21.1494H18.3864C18.8633 21.1494 19.2499 20.7627 19.2499 20.2858V18.2689C19.2499 17.1236 18.3215 16.1952 17.1762 16.1952ZM6.82364 15.4452C5.26415 15.4452 3.99994 16.7094 3.99994 18.2689V20.2858C3.99994 21.177 4.72235 21.8994 5.61348 21.8994H18.3864C19.2775 21.8994 19.9999 21.177 19.9999 20.2858V18.2689C19.9999 16.7094 18.7357 15.4452 17.1762 15.4452H6.82364Z"
+                    fill="black"
+                  />
+                </svg>
+                {/* {console.log(clientManagement)} */}
+                <button
+                  onClick={() => setClientManagement(!clientManagement)}
+                  className="link-name"
+                >
+                  Client Management
+                </button>
               </div>
             </li>
           </ul>
@@ -404,7 +230,12 @@ const DashBoard = () => {
             >
               <path d="M448.3,424.7L335,311.3c20.8-26,33.3-59.1,33.3-95.1c0-84.1-68.1-152.2-152-152.2c-84,0-152,68.2-152,152.2  s68.1,152.2,152,152.2c36.2,0,69.4-12.7,95.5-33.8L425,448L448.3,424.7z M120.1,312.6c-25.7-25.7-39.8-59.9-39.8-96.3  s14.2-70.6,39.8-96.3S180,80,216.3,80c36.3,0,70.5,14.2,96.2,39.9s39.8,59.9,39.8,96.3s-14.2,70.6-39.8,96.3  c-25.7,25.7-59.9,39.9-96.2,39.9C180,352.5,145.8,338.3,120.1,312.6z" />
             </svg>
-            <input type="text" placeholder="Search here..." />
+            <input
+              type="text"
+              id="searhHistory"
+              name="searhHistory"
+              placeholder="Search here..."
+            />
           </div>
           <img
             className="round"
@@ -412,89 +243,96 @@ const DashBoard = () => {
             alt="user"
           />
         </div>
-        <div className="dash-content">
-          <div className="overview">
-            <div className="title">
-              <i className="uil uil-tachometer-fast-alt"></i>
-              <span className="text">Dashboard</span>
+        {clientManagement ? (
+          <ClientManagement
+            handleOpenClient={handleOpenClient}
+            handleCloseClient={handleCloseClient}
+          />
+        ) : (
+          <div className="dash-content">
+            <div className="overview">
+              <div className="title">
+                <i className="uil uil-tachometer-fast-alt"></i>
+                <span className="text">Dashboard</span>
+              </div>
+              <div className="boxes">
+                <div className="box box1">
+                  <i className="uil uil-thumbs-up"></i>
+                  <span className="text">Total Projects</span>
+                  <span className="number">512</span>
+                </div>
+                <div className="box box2">
+                  <i className="uil uil-comments"></i>
+                  <span className="text">Comments</span>
+                  <span className="number">20,120</span>
+                </div>
+                <div className="box box3">
+                  <i className="uil uil-share"></i>
+                  <span className="text">Total Share</span>
+                  <span className="number">10,120</span>
+                </div>
+              </div>
             </div>
-            <div className="boxes">
-              <div className="box box1">
-                <i className="uil uil-thumbs-up"></i>
-                <span className="text">Total Projects</span>
-                <span className="number">512</span>
+            <div className="activity">
+              <div className="title">
+                <i className="uil uil-clock-three"></i>
+                <span className="text">Recent Activity</span>
               </div>
-              <div className="box box2">
-                <i className="uil uil-comments"></i>
-                <span className="text">Comments</span>
-                <span className="number">20,120</span>
-              </div>
-              <div className="box box3">
-                <i className="uil uil-share"></i>
-                <span className="text">Total Share</span>
-                <span className="number">10,120</span>
+              <div className="activity-data">
+                <div className="data names">
+                  <span className="data-title">Name</span>
+                  <span className="data-list">project name</span>
+                  <span className="data-list">project name</span>
+                  <span className="data-list">project name</span>
+                  <span className="data-list">project name</span>
+                  <span className="data-list">project name</span>
+                  <span className="data-list">project name</span>
+                  <span className="data-list">project name</span>
+                </div>
+                <div className="data email">
+                  <span className="data-title">Email</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                  <span className="data-list">projectname@gmail.com</span>
+                </div>
+                <div className="data joined">
+                  <span className="data-title">Joined</span>
+                  <span className="data-list">2022-02-12</span>
+                  <span className="data-list">2022-02-12</span>
+                  <span className="data-list">2022-02-13</span>
+                  <span className="data-list">2022-02-13</span>
+                  <span className="data-list">2022-02-14</span>
+                  <span className="data-list">2022-02-14</span>
+                  <span className="data-list">2022-02-15</span>
+                </div>
+                <div className="data type">
+                  <span className="data-title">Type</span>
+                  <span className="data-list">New</span>
+                  <span className="data-list">Member</span>
+                  <span className="data-list">Member</span>
+                  <span className="data-list">New</span>
+                  <span className="data-list">Member</span>
+                  <span className="data-list">New</span>
+                  <span className="data-list">Member</span>
+                </div>
+                <div className="data status">
+                  <span className="data-title">Status</span>
+                  <span className="data-list">Liked</span>
+                  <span className="data-list">Liked</span>
+                  <span className="data-list">Liked</span>
+                  <span className="data-list">Liked</span>
+                  <span className="data-list">Liked</span>
+                  <span className="data-list">Liked</span>
+                  <span className="data-list">Liked</span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="activity">
-            <div className="title">
-              <i className="uil uil-clock-three"></i>
-              <span className="text">Recent Activity</span>
-            </div>
-            <div className="activity-data">
-              <div className="data names">
-                <span className="data-title">Name</span>
-                <span className="data-list">project name</span>
-                <span className="data-list">project name</span>
-                <span className="data-list">project name</span>
-                <span className="data-list">project name</span>
-                <span className="data-list">project name</span>
-                <span className="data-list">project name</span>
-                <span className="data-list">project name</span>
-              </div>
-              <div className="data email">
-                <span className="data-title">Email</span>
-                <span className="data-list">projectname@gmail.com</span>
-                <span className="data-list">projectname@gmail.com</span>
-                <span className="data-list">projectname@gmail.com</span>
-                <span className="data-list">projectname@gmail.com</span>
-                <span className="data-list">projectname@gmail.com</span>
-                <span className="data-list">projectname@gmail.com</span>
-                <span className="data-list">projectname@gmail.com</span>
-              </div>
-              <div className="data joined">
-                <span className="data-title">Joined</span>
-                <span className="data-list">2022-02-12</span>
-                <span className="data-list">2022-02-12</span>
-                <span className="data-list">2022-02-13</span>
-                <span className="data-list">2022-02-13</span>
-                <span className="data-list">2022-02-14</span>
-                <span className="data-list">2022-02-14</span>
-                <span className="data-list">2022-02-15</span>
-              </div>
-              <div className="data type">
-                <span className="data-title">Type</span>
-                <span className="data-list">New</span>
-                <span className="data-list">Member</span>
-                <span className="data-list">Member</span>
-                <span className="data-list">New</span>
-                <span className="data-list">Member</span>
-                <span className="data-list">New</span>
-                <span className="data-list">Member</span>
-              </div>
-              <div className="data status">
-                <span className="data-title">Status</span>
-                <span className="data-list">Liked</span>
-                <span className="data-list">Liked</span>
-                <span className="data-list">Liked</span>
-                <span className="data-list">Liked</span>
-                <span className="data-list">Liked</span>
-                <span className="data-list">Liked</span>
-                <span className="data-list">Liked</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </section>
     </div>
   );
