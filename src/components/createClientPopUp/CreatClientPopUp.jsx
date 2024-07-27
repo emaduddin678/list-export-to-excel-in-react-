@@ -6,15 +6,11 @@ import { useClientContext } from "../../context/ClientContext";
 
 const CreateClientPopUp = () => {
   const [error, setError] = useState(false);
-  const { handleCloseClient } = useClientContext();
-  const [clientInfo, setClientInfo] = useState({
-    client_name: "",
-    designation: "",
-    department: "",
-    circle: "",
-    contact_number: "",
-    email_id: "",
-  });
+  const { handleCloseClient, prevClientData } = useClientContext();
+  const [clientInfo, setClientInfo] = useState(prevClientData);
+  console.log(clientInfo);
+  console.log(prevClientData);
+
   const navigate = useNavigate();
   const handleFormInput = (e) => {
     setClientInfo((prev) => {
@@ -49,20 +45,31 @@ const CreateClientPopUp = () => {
   const hanleFormSubmit = (e) => {
     e.preventDefault();
     if (validateProjectInfo()) {
-      // Proceed with form submission or other logic
-      // navigate("createboq");
-
-      axios
-        .post("/client-user/create", getFormData(clientInfo))
-        .then((res) => {
-          console.log(res.data);
-          handleCloseClient(false);
-          // handleOpenClient();
-          console.log("Hello ");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (clientInfo.id) {
+        axios
+          .post(`/client-user/update/${clientInfo.id}`, getFormData(clientInfo))
+          .then((res) => {
+            console.log(res.data);
+            handleCloseClient(false);
+            // handleOpenClient();
+            console.log("updated info ");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios
+          .post("/client-user/create", getFormData(clientInfo))
+          .then((res) => {
+            console.log(res.data);
+            handleCloseClient(false);
+            // handleOpenClient();
+            console.log("Hello ");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     } else {
       console.log("Form is invalid. Please fill out all fields.");
     }

@@ -10,12 +10,21 @@ export function useClientContext() {
 const ClientContextProvider = ({ children }) => {
   const [createClientModal, setCreateClientModal] = useState(false);
   const [clientData, setClientData] = useState([]);
+  const [prevClientData, setPrevClientData] = useState({
+    client_name: "",
+    designation: "",
+    department: "",
+    circle: "",
+    contact_number: "",
+    email_id: "",
+  });
+  // console.log("🚀 ~ ClientContextProvider ~ prevClientData:", prevClientData);
 
   const fetchUsers = () => {
     try {
       axios
         .get("/client-user/all-user")
-        .then((res) => setClientData(res.data.data.data)) 
+        .then((res) => setClientData(res.data.data.data))
         .catch((err) => {
           throw err;
         });
@@ -95,7 +104,22 @@ const ClientContextProvider = ({ children }) => {
     fetchUsers();
   };
 
+  const handleOpenUpdateClient = (info) => {
+    // console.log("🚀 ~ handleUpdateClient ~ info:", info);
+    setPrevClientData(info);
+    setCreateClientModal(true);
+    // fetchUsers();
+  };
+
   const handleCloseClient = () => {
+    setPrevClientData({
+      client_name: "",
+      designation: "",
+      department: "",
+      circle: "",
+      contact_number: "",
+      email_id: "",
+    });
     fetchUsers();
     setCreateClientModal(false);
   };
@@ -108,10 +132,12 @@ const ClientContextProvider = ({ children }) => {
     handleCloseClient,
 
     clientData,
+    prevClientData,
     handleDelete,
     fetchUsers,
     fetchUsersByName,
     fetchUsersById,
+    handleOpenUpdateClient,
   };
   return (
     <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

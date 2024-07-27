@@ -5,10 +5,13 @@ import { useClientContext } from "../../context/ClientContext";
 const ClientManagement = () => {
   const {
     clientData,
+    createClientModal,
+    handleCloseClient,
     handleOpenClient,
     handleDelete,
     fetchUsersByName,
     fetchUsersById,
+    handleOpenUpdateClient,
   } = useClientContext();
 
   return (
@@ -90,7 +93,7 @@ const ClientManagement = () => {
                   name="searchId"
                   id="searchId"
                   onChange={(e) => fetchUsersById(e.target.value)}
-                  placeholder="Search by id..." 
+                  placeholder="Search by id..."
                   className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none bg-gray-800 text-gray-100 focus:bg-gray-900 focus:border-violet-400"
                 />
               </div>
@@ -133,7 +136,10 @@ const ClientManagement = () => {
                       <p>{item.email_id}</p>
                     </td>
                     <td className="p-3 flex justify-between">
-                      <span className="px-3 py-1 font-semibold rounded-md bg-violet-400 text-gray-900">
+                      <span
+                        onClick={() => handleOpenUpdateClient(item)}
+                        className="px-3 py-1 font-semibold rounded-md bg-violet-400 text-gray-900"
+                      >
                         <span>Update</span>
                       </span>
                       <span
