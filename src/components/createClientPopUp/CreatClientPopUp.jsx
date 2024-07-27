@@ -302,7 +302,7 @@ const CreateClientPopUp = () => {
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                  Add new product
+                  Add new client
                 </button>
                 <button
                   onClick={hanleRefreshForm}

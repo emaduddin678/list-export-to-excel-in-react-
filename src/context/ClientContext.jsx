@@ -3,9 +3,9 @@ import axios from "axios";
 
 const ClientContext = createContext();
 
-export const useClientContext = () => {
+export function useClientContext() {
   return useContext(ClientContext);
-};
+}
 
 const ClientContextProvider = ({ children }) => {
   const [createClientModal, setCreateClientModal] = useState(false);
@@ -14,11 +14,52 @@ const ClientContextProvider = ({ children }) => {
   const fetchUsers = () => {
     try {
       axios
-        .get("https://boq.xri.com.bd/v1/client-user/all-user")
-        .then((res) => setClientData(res.data.data.data))
+        .get("/client-user/all-user")
+        .then((res) => setClientData(res.data.data.data)) 
         .catch((err) => {
           throw err;
         });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUsersByName = (name) => {
+    try {
+      console.log(name);
+      if (name === "") {
+        fetchUsers();
+      } else {
+        axios
+          .get(`/client-user/name/${name}`)
+          .then((res) => setClientData(res.data.data))
+          .catch((err) => {
+            throw err;
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUsersById = (id) => {
+    console.log(id);
+    try {
+      if (id === "") {
+        fetchUsers();
+      } else {
+        axios
+          .get(`client-user/find/${id}`)
+          .then((res) => {
+            // console.log(res)
+            if (res.data.status) {
+              setClientData([res.data.data]);
+            }
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +91,7 @@ const ClientContextProvider = ({ children }) => {
 
   const handleOpenClient = () => {
     // console.log("this is calling from client management");
-    setCreateClientModal(true); 
+    setCreateClientModal(true);
     fetchUsers();
   };
 
@@ -69,6 +110,8 @@ const ClientContextProvider = ({ children }) => {
     clientData,
     handleDelete,
     fetchUsers,
+    fetchUsersByName,
+    fetchUsersById,
   };
   return (
     <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

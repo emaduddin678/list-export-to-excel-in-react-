@@ -12,7 +12,7 @@ const DashBoard = () => {
   const { createClientModal, handleOpenClient, handleCloseClient } = useClientContext();
 
   const [createBoqModal, setCreateBoqModal] = useState(false);
-  const [clientManagementShow, setClientManagementShow] = useState(false);
+  const [clientManagementShow, setClientManagementShow] = useState(!false);
 
   useEffect(() => {
     // Set initial mode based on localStorage
