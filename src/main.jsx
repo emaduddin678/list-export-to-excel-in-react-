@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import ClientContextProvider from "./context/ClientContext.jsx";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -44,11 +45,13 @@ axios.interceptors.response.use(
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
+      <ClientContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ClientContextProvider>
     </AuthProvider>
   </React.StrictMode>
 );

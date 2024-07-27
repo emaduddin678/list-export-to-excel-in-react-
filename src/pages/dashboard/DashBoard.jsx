@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { isRouteErrorResponse, Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import {  Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CreateBoqPopUp from "../../components/createBoqPopUp/CreateBoqPopUp";
 import ClientManagement from "../../components/clientManagement/ClientManagement";
 import CreateClientPopUp from "../../components/createClientPopUp/CreatClientPopUp";
+import { useClientContext } from "../../context/ClientContext";
 
 const DashBoard = () => {
-  const [createBoqModal, setCreateBoqModal] = useState(false);
-  const [createClientModal, setCreateClientModal] = useState(false);
-  const [clientManagement, setClientManagement] = useState(false);
-
-  const user = useAuth();
   const navigate = useNavigate();
+
+  const { createClientModal, handleOpenClient, handleCloseClient } = useClientContext();
+
+  const [createBoqModal, setCreateBoqModal] = useState(false);
+  const [clientManagementShow, setClientManagementShow] = useState(false);
+
   useEffect(() => {
     // Set initial mode based on localStorage
     const mode = localStorage.getItem("mode") || "light";
@@ -43,7 +44,7 @@ const DashBoard = () => {
   };
 
   const handleLogout = () => {
-    user.logout();
+    // user.logout();
   };
   const handleCreateBOQ = () => {
     setCreateBoqModal(true);
@@ -51,19 +52,16 @@ const DashBoard = () => {
   const handleCloseBOQ = () => {
     setCreateBoqModal(false);
   };
-  const handleOpenClient = () => {
-    // console.log("this is calling from client management");
-    setCreateClientModal(true);
-  };
-  const handleCloseClient = () => {
-    setCreateClientModal(false);
-  };
+
 
   return (
     <div className={`${createBoqModal && "relative h-screen overflow-hidden"}`}>
       {createBoqModal && <CreateBoqPopUp handleCloseBOQ={handleCloseBOQ} />}
       {createClientModal && (
-        <CreateClientPopUp handleCloseClient={handleCloseClient} />
+        <CreateClientPopUp
+          handleCloseClient={handleCloseClient}
+          handleOpenClient={handleOpenClient}
+        />
       )}
       <nav id="navId">
         <div className="logo-name">
@@ -75,7 +73,10 @@ const DashBoard = () => {
         <div className="menu-items">
           <ul className="nav-links">
             <li>
-              <div style={{ cursor: "pointer" }}>
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => setClientManagementShow(false)}
+              >
                 <svg
                   width="24"
                   fill="#707070"
@@ -143,7 +144,7 @@ const DashBoard = () => {
                 </svg>
                 {/* {console.log(clientManagement)} */}
                 <button
-                  onClick={() => setClientManagement(!clientManagement)}
+                  onClick={() => setClientManagementShow(true)}
                   className="link-name"
                 >
                   Client Management
@@ -243,7 +244,7 @@ const DashBoard = () => {
             alt="user"
           />
         </div>
-        {clientManagement ? (
+        {clientManagementShow ? (
           <ClientManagement
             handleOpenClient={handleOpenClient}
             handleCloseClient={handleCloseClient}

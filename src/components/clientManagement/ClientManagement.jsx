@@ -1,41 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useClientContext } from "../../context/ClientContext";
 
-const ClientManagement = ({ handleOpenClient }) => {
-  const [clientData, setClientData] = useState([]);
-  const fetchUsers = () => {
-    axios
-      .get("https://boq.xri.com.bd/v1/client-user/all-user")
-      .then((res) => setClientData(res.data.data.data))
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+const ClientManagement = () => {
+  const { handleOpenClient } = useClientContext();
+  const { clientData } = useClientContext();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-  // console.log(projectInfo);
-
-  const handleDelete = (id) => {
-    axios
-      .delete(`https://boq.xri.com.bd/v1/client-user/delete/${id}`)
-      .then((res) => {
-        if (res.status === 200) {
-          fetchUsers();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <div className="pt-20">
       <div className="container p-2 mx-auto sm:p-4 text-gray-100">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-5">
           <button
             onClick={handleOpenClient}
-            className="bg-gray-700 mb-4 text-2xl font-semibold rounded-md px-4 py-1"
+            className="bg-gray-700 text-2xl font-semibold rounded-md px-4 py-1"
           >
             {/* {console.log(handleOpenClient)} */}
             Create New Client
@@ -103,14 +80,7 @@ const ClientManagement = ({ handleOpenClient }) => {
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full text-xs">
-            {/* <colgroup>
-                    <col />
-                    <col />
-                    <col />
-                    <col />
-                    <col />
-                    <col className="w-52" />
-                  </colgroup> */}
+            
             <thead className="bg-gray-700">
               <tr className="text-left">
                 <th className="p-3">Id</th>

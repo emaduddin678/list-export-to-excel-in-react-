@@ -10,6 +10,9 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(false);
+  // const [createClientModal, setCreateClientModal] = useState(false);
+
+
 
   // login function
   function login(msg) {
@@ -30,6 +33,7 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     logout,
+   
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

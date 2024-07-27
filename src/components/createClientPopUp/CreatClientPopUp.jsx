@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useClientContext } from "../../context/ClientContext";
 
-const CreateClientPopUp = ({ handleCloseClient }) => {
+const CreateClientPopUp = () => {
   const [error, setError] = useState(false);
+  const { handleCloseClient } = useClientContext();
   const [clientInfo, setClientInfo] = useState({
     client_name: "",
     designation: "",
@@ -12,7 +15,6 @@ const CreateClientPopUp = ({ handleCloseClient }) => {
     contact_number: "",
     email_id: "",
   });
-  const user = useAuth();
   const navigate = useNavigate();
   const handleFormInput = (e) => {
     setClientInfo((prev) => {
@@ -23,19 +25,11 @@ const CreateClientPopUp = ({ handleCloseClient }) => {
     });
   };
   const validateProjectInfo = () => {
-    const {
-      client_name,
-      designation,
-      department,
-      circle,
-      contact_number,
-      email_id,
-    } = clientInfo;
+    const { client_name, department, circle, contact_number, email_id } =
+      clientInfo;
     if (
       client_name === "" ||
-      designation === "" ||
       department === "" ||
-      circle === "" ||
       contact_number === "" ||
       email_id === ""
     ) {
@@ -47,13 +41,28 @@ const CreateClientPopUp = ({ handleCloseClient }) => {
     return true;
   };
 
+  function getFormData(object) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
   const hanleFormSubmit = (e) => {
     e.preventDefault();
     if (validateProjectInfo()) {
       // Proceed with form submission or other logic
       // navigate("createboq");
-      console.log("Form is valid. Submitting...");
-      console.log(clientInfo);
+
+      axios
+        .post("/client-user/create", getFormData(clientInfo))
+        .then((res) => {
+          console.log(res.data);
+          handleCloseClient(false);
+          // handleOpenClient();
+          console.log("Hello ");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       console.log("Form is invalid. Please fill out all fields.");
     }
@@ -72,10 +81,10 @@ const CreateClientPopUp = ({ handleCloseClient }) => {
     });
   };
 
-  console.log(error);
+  // console.log(error);
   return (
     <div
-      className={`z-20 opacity-1 transition-all delay-300 bg-gray-900 absolute inset-0 flex justify-center items-center`}
+      className={`z-20 opacity-1 transition-all delay-300 glassyEffect absolute inset-0 flex justify-center items-center`}
     >
       <div className=" bg-black ">
         <div className="relative p-4 w-full max-w-md max-h-full">
