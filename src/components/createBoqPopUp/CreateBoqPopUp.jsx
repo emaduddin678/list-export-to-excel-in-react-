@@ -7,6 +7,7 @@ import { MdAutorenew } from "react-icons/md";
 const CreateBoqPopUp = ({ handleCloseBOQ }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [changing, setChanging] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -41,16 +42,28 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
           console.log(clientsIdWithName[highlightedIndex]);
           getGPUserId(clientsIdWithName[highlightedIndex].id); // Assuming the item has a 'name' property
           // setAllProduct((prev) => [...prev, clientsIdWithName[highlightedIndex]]);
+          setChanging(false);
           setIsFocused(false);
         }
         break;
       case "Escape":
+        setChanging(false);
         setIsFocused(false);
         break;
       default:
         break;
     }
   };
+
+  const handleOnFocus = () => {
+    setIsFocused(true);
+    setChanging(true);
+  };
+  const handleOnBlur = () => {
+    setIsFocused(false);
+    setChanging(false);
+  };
+
   const handleItemClick = (item) => {
     getGPUserId(item.id); // Adjust according to the structure of your data
     setIsFocused(false);
@@ -68,24 +81,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
     //   console.log("Form is invalid. Please fill out all fields.");
     // }
   };
-  // const handleSearchChange = (e) => {
-  //   handleFormInput(e);
-  //   handleDropdown();
-  // };
-  // useEffect(() => {
-  //   handleDropdown();
-  // }, [nameForGP_user_id]);
-  // const handleDropdown = () => {
-  //   setTimeout(function () {
-  //     inputElement.current.size = clientsIdWithName.length + 1;
-  //   });
-  // };
-  // const handleCloseDropdown = () => {
-  //   setTimeout(function () {
-  //     // inputElement.current.size = 0;
-  //     inputElement.current.focus();
-  //   });
-  // };
+
   return (
     <div
       className={`z-20 opacity-1 transition-all delay-300 bg-gray-900 absolute inset-0 flex justify-center items-center `}
@@ -128,17 +124,18 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
               <div className="grid gap-4 mb-4 grid-cols-2 bg-black ">
                 <div className="col-span-2 bg-black ">
                   <label
-                    htmlFor="name"
+                    htmlFor="Project_name"
                     className="block mb-2 text-sm font-medium text-white "
                   >
                     BOQ Title
                   </label>
                   <input
+                    autoComplete="off"
                     type="text"
                     name="Project_name"
                     onChange={handleFormInput}
                     value={boq.Project_name}
-                    id="name"
+                    id="Project_name"
                     className={`${
                       boq.Project_name !== "" && error
                         ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
@@ -150,17 +147,18 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                 </div>
                 <div className="col-span-2 bg-black sm:col-span-1">
                   <label
-                    htmlFor="pName"
+                    htmlFor="AEXP_BOQ_Creator"
                     className="block mb-2 text-sm font-medium text-white "
                   >
                     Provider user name
                   </label>
                   <input
                     type="text"
+                    autoComplete="off"
                     name="AEXP_BOQ_Creator"
                     onChange={handleFormInput}
                     value={boq.AEXP_BOQ_Creator}
-                    id="pName"
+                    id="AEXP_BOQ_Creator"
                     className={`${
                       boq.AEXP_BOQ_Creator !== "" && error
                         ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
@@ -189,6 +187,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                       </button>
                     </span>
                     <input
+                      autoComplete="off"
                       type="text"
                       name="BOQ_ID"
                       onChange={handleFormInput}
@@ -206,7 +205,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
-                    htmlFor="client Name"
+                    htmlFor="client_Name"
                     className="block mb-2 text-sm font-medium  text-white "
                   >
                     Client Name
@@ -214,14 +213,14 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                   {/* {console.log(error)} */}
                   <input
                     type="text"
-                    name="GP_user_id"
+                    name="client_Name"
                     onChange={(e) => handleFormInput(e)}
-                    onFocus={() => setIsFocused(true)}
+                    onFocus={() => handleOnFocus()}
                     onKeyDown={handleKeyDown}
-                    onBlur={() => setIsFocused(false)}
+                    onBlur={() => handleOnBlur()}
                     autoComplete="off"
                     value={nameForGP_user_id}
-                    id="client Name"
+                    id="client_Name"
                     className={`${
                       nameForGP_user_id !== "" && error
                         ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
@@ -236,12 +235,13 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                     htmlFor="GP_user_id"
                     className="block mb-2 text-sm font-medium  text-white "
                   >
-                    GP User Id
+                    Client Id
                   </label>
                   {isFocused && clientsIdWithName.length && (
                     <ul className="absolute z-50 bg-white border border-gray-300 w-[43%] rounded-md mt-1">
                       {clientsIdWithName?.map((item, index) => (
                         <li
+                          // id="GP_user_id"
                           key={index}
                           className={`p-2 cursor-pointer flex justify-start ${
                             highlightedIndex === index
@@ -251,13 +251,30 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                           onMouseDown={() => handleItemClick(item)} // Use onMouseDown to avoid blur event
                           onMouseEnter={() => setHighlightedIndex(index)}
                         >
-                          {console.log(item)}
+                          {/* {console.log(item)} */}
                           <span className="text-black">
                             {item.client_name}{" "}
                           </span>
                         </li>
                       ))}
                     </ul>
+                  )}
+                  {boq?.GP_user_id && !isFocused && !changing && (
+                    <input
+                      type="text"
+                      name="GP_user_id Name"
+                      autoComplete="off"
+                      value={boq?.GP_user_id}
+                      id="GP_user_id"
+                      disabled
+                      className={`${
+                        boq?.GP_user_id === "" && error
+                          ? "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                          : "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      }`}
+                      placeholder="Enter name..."
+                      required=""
+                    />
                   )}
                   {/* <select
                     id="GP_user_id"

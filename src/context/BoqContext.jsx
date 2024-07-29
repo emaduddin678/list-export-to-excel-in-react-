@@ -58,16 +58,16 @@ const BoqContextProvider = ({ children }) => {
   }, [nameForGP_user_id]);
   // const user = useAuth();
   const handleFormInput = (e) => {
-    if (e.target.name === "GP_user_id") {
+    if (e.target.name === "client_Name") {
       setNameForGP_user_id(e.target.value);
-    } else if (e.target.name === "BOQ_ID") {
+    } else if (e.target.name === "Project_name") {
       const idTxt = boq.Project_name.split(" ")[0].toUpperCase();
-      const aaa =idTxt, (e.target.value)`
+      // const aaa =idTxt, (e.target.value)
       setBoq((prev) => {
         return {
           ...prev,
-          BOQ_ID: "",
-          BOQ_ID: aaa,
+          [e.target.name]: e.target.value,
+          BOQ_ID: idTxt,
         };
       });
     } else {
