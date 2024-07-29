@@ -24,7 +24,11 @@ const ClientContextProvider = ({ children }) => {
     try {
       axios
         .get("/client-user/all-user")
-        .then((res) => setClientData(res.data.data.data))
+        .then((res) => {
+          if (res.status === 200) {
+            setClientData(res.data.data.data);
+          }
+        })
         .catch((err) => {
           throw err;
         });

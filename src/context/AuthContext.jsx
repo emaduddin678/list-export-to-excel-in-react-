@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 
 const AuthContext = React.createContext();
@@ -12,28 +13,48 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(false);
   // const [createClientModal, setCreateClientModal] = useState(false);
 
-
-
+  function getFormData(object) {
+    const formData = new FormData();
+    Object.keys(object).forEach((key) => formData.append(key, object[key]));
+    return formData;
+  }
   // login function
-  function login(msg) {
-    if (msg === "Login Successful") {
-      setCurrentUser(true);
-      return true;
-    } else {
-      return false;
+  async function login(userInfo) {
+    try {
+      const response = await axios.post("/login", getFormData(userInfo));
+      console.log(response);
+      localStorage.setItem("token", response.data.token);
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${response.data.token}`;
+
+      if (response.status === 200) {
+        setCurrentUser(true)
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+      if (error) {
+        return false;
+      }
+      // Handle other errors as needed
+      // return false; // or some other indication of an error
     }
   }
 
   //logout function
   function logout() {
     setCurrentUser(false);
+    axios
+      .post("/logout")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   }
 
   const value = {
     currentUser,
     login,
     logout,
-   
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

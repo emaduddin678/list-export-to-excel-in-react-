@@ -38,13 +38,13 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
 
   const hanleFormSubmit = (e) => {
     e.preventDefault();
-    if (validateProjectInfo()) {
+    navigate("createboq");
+    // if (validateProjectInfo()) {
       // Proceed with form submission or other logic
-      navigate("createboq");
-      console.log("Form is valid. Submitting...");
-    } else {
-      console.log("Form is invalid. Please fill out all fields.");
-    }
+    //   console.log("Form is valid. Submitting...");
+    // } else {
+    //   console.log("Form is invalid. Please fill out all fields.");
+    // }
   };
   return (
     <div

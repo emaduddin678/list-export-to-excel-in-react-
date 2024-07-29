@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {  Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CreateBoqPopUp from "../../components/createBoqPopUp/CreateBoqPopUp";
 import ClientManagement from "../../components/clientManagement/ClientManagement";
 import CreateClientPopUp from "../../components/createClientPopUp/CreatClientPopUp";
 import { useClientContext } from "../../context/ClientContext";
+import { useAuth } from "../../context/AuthContext";
 
 const DashBoard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const { createClientModal, handleOpenClient, handleCloseClient } = useClientContext();
+  const { createClientModal, handleOpenClient, handleCloseClient } =
+    useClientContext();
 
   const [createBoqModal, setCreateBoqModal] = useState(false);
-  const [clientManagementShow, setClientManagementShow] = useState(!false);
+  const [clientManagementShow, setClientManagementShow] = useState(false);
+  const [historyShow, setHistoryShow] = useState(false);
 
   useEffect(() => {
     // Set initial mode based on localStorage
@@ -26,6 +30,11 @@ const DashBoard = () => {
     // }
   }, []);
 
+  const goToDashBoard = () => {
+    setClientManagementShow(false);
+    setHistoryShow(false);
+    setCreateBoqModal(false);
+  };
   const handleModeToggle = () => {
     document.body.classList.toggle("dark");
     if (document.body.classList.contains("dark")) {
@@ -44,15 +53,30 @@ const DashBoard = () => {
   };
 
   const handleLogout = () => {
-    // user.logout();
+    logout();
   };
   const handleCreateBOQ = () => {
+    setClientManagementShow(false);
+    setHistoryShow(false);
     setCreateBoqModal(true);
   };
   const handleCloseBOQ = () => {
     setCreateBoqModal(false);
+    setHistoryShow(false);
+    setClientManagementShow(false);
+    setCreateBoqModal(false);
   };
-
+  const handleHistoryShow = () => {
+    setCreateBoqModal(false);
+    setClientManagementShow(false);
+    setHistoryShow(true);
+  };
+  const handleClientShow = () => {
+    setCreateBoqModal(false);
+    setHistoryShow(false);
+    setClientManagementShow(true);
+  };
+  // console.log(historyShow);
 
   return (
     <div className={`${createBoqModal && "relative h-screen overflow-hidden"}`}>
@@ -73,10 +97,7 @@ const DashBoard = () => {
         <div className="menu-items">
           <ul className="nav-links">
             <li>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => setClientManagementShow(false)}
-              >
+              <div style={{ cursor: "pointer" }} onClick={goToDashBoard}>
                 <svg
                   width="24"
                   fill="#707070"
@@ -94,7 +115,7 @@ const DashBoard = () => {
               </div>
             </li>
             <li>
-              <div style={{ cursor: "pointer" }}>
+              <div style={{ cursor: "pointer" }} onClick={handleCreateBOQ}>
                 <svg
                   fill="#707070"
                   height="24"
@@ -107,13 +128,11 @@ const DashBoard = () => {
                     fillRule="evenodd"
                   />
                 </svg>
-                <button onClick={handleCreateBOQ} className="link-name">
-                  Create BOQ
-                </button>
+                <button className="link-name">Create BOQ</button>
               </div>
             </li>
             <li>
-              <div style={{ cursor: "pointer" }}>
+              <div style={{ cursor: "pointer" }} onClick={handleHistoryShow}>
                 <svg
                   fill="#707070"
                   width="24"
@@ -142,11 +161,7 @@ const DashBoard = () => {
                     fill="black"
                   />
                 </svg>
-                {/* {console.log(clientManagement)} */}
-                <button
-                  onClick={() => setClientManagementShow(true)}
-                  className="link-name"
-                >
+                <button onClick={handleClientShow} className="link-name">
                   Client Management
                 </button>
               </div>
@@ -249,6 +264,8 @@ const DashBoard = () => {
             handleOpenClient={handleOpenClient}
             handleCloseClient={handleCloseClient}
           />
+        ) : historyShow ? (
+          <h1 className="mt-40">History</h1>
         ) : (
           <div className="dash-content">
             <div className="overview">

@@ -4,6 +4,7 @@ import { useAuth } from "./../../context/AuthContext";
 const PrivateRoute = ({ children }) => {
   // hooks and states
   const { currentUser } = useAuth();
+  console.log(currentUser)
 
   // if user found then return the element
   if (currentUser) {

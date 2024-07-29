@@ -33,19 +33,19 @@ function App() {
             <Route
               path="createboq"
               element={
-                <PrivateRoute>
+                // <PrivateRoute>
                   <SearchInput />
-                </PrivateRoute>
+                // </PrivateRoute>
               }
             />
-            <Route
+            {/* <Route
               path="history"
               element={
-                <PrivateRoute>
+                // <PrivateRoute>
                   <HistoryPage />
-                </PrivateRoute>
+                // </PrivateRoute>
               }
-            />
+            /> */}
           </Route>
         </Route>
         <Route path="*" element={<ErrorPage />} />

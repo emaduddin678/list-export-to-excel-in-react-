@@ -14,6 +14,8 @@ const ClientManagement = () => {
     handleOpenUpdateClient,
   } = useClientContext();
 
+  
+
   return (
     <div className="pt-20">
       <div className="container p-2 mx-auto sm:p-4 text-gray-100">

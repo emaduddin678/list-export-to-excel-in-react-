@@ -13,6 +13,7 @@ import {
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ClientContextProvider from "./context/ClientContext.jsx";
+import BoqContextProvider from "./context/BoqContext.jsx";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -46,11 +47,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
       <ClientContextProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </QueryClientProvider>
+        <BoqContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </QueryClientProvider>
+        </BoqContextProvider>
       </ClientContextProvider>
     </AuthProvider>
   </React.StrictMode>

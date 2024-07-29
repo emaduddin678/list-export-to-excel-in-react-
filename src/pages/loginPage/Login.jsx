@@ -9,7 +9,7 @@ const Login = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
   const navigate = useNavigate();
-  const user = useAuth();
+  const { currentUser,login } = useAuth();
   // console.log(user);
 
   const handleChange = (e) => {
@@ -19,41 +19,20 @@ const Login = () => {
     }));
   };
 
-  function getFormData(object) {
-    const formData = new FormData();
-    Object.keys(object).forEach((key) => formData.append(key, object[key]));
-    return formData;
-  }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+     const result = await login(userInfo);
+     console.log(currentUser,result);
 
-    axios
-      .post("/login", getFormData(userInfo))
-      .then((response) => {
-        console.log(response);
-        localStorage.setItem("token", response.data.token);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data.token}`;
-        setError(false);
-        if (response.status === 200 && user.login(response.data.message)) {
-          navigate("/dashboard");
-        }
-      })
-      .catch((error) => {
-        setError(true);
-        console.log(error);
-        if (error.response.status === 422) {
-          setErrorMessage(error.response.data.message);
-        }
-      });
-    // setError(false);
-    // if (user.login(userInfo.email, userInfo.password) === "success") {
-    //   navigate("/dashboard");
-    // } else {
-    //   setError(true);
-    // }
+     if(result){
+      console.log("Login success!")
+        navigate("/dashboard");
+     }else{
+      console.log("Authentication Fail!")
+     }
+
+   
   };
 
   return (
