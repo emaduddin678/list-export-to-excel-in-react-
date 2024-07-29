@@ -6,6 +6,7 @@ import ClientManagement from "../../components/clientManagement/ClientManagement
 import CreateClientPopUp from "../../components/createClientPopUp/CreatClientPopUp";
 import { useClientContext } from "../../context/ClientContext";
 import { useAuth } from "../../context/AuthContext";
+import HistoryPage from "../historyPage/HistoryPage";
 
 const DashBoard = () => {
   const navigate = useNavigate();
@@ -79,8 +80,13 @@ const DashBoard = () => {
   // console.log(historyShow);
 
   return (
-    <div className={`${createBoqModal && "relative h-screen overflow-hidden"}`}>
-      {createBoqModal && <CreateBoqPopUp handleCloseBOQ={handleCloseBOQ} />}
+    <div
+      className={`${
+        (!createBoqModal || createClientModal) &&
+        "relative h-screen overflow-hidden"
+      }`}
+    >
+      {!createBoqModal && <CreateBoqPopUp handleCloseBOQ={handleCloseBOQ} />}
       {createClientModal && (
         <CreateClientPopUp
           handleCloseClient={handleCloseClient}
@@ -265,7 +271,7 @@ const DashBoard = () => {
             handleCloseClient={handleCloseClient}
           />
         ) : historyShow ? (
-          <h1 className="mt-40">History</h1>
+          <HistoryPage />
         ) : (
           <div className="dash-content">
             <div className="overview">

@@ -1,54 +1,94 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useBoqContext } from "../../context/BoqContext";
+import { MdAutorenew } from "react-icons/md";
 
-const CreateBoqPopUp = ({handleCloseBOQ}) => {
-  const [error, setError] = useState(false);
-  const [projectInfo, setProjectInfo] = useState({
-    projectTitle: "",
-    userName: "",
-    clientName: "",
-    ariaCircle: "",
-  });
-  const user = useAuth();
+const CreateBoqPopUp = ({ handleCloseBOQ }) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
   const navigate = useNavigate();
-  const handleFormInput = (e) => {
-    setProjectInfo((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
-  const validateProjectInfo = () => {
-    const { projectTitle, userName, clientName, ariaCircle } = projectInfo;
-    if (
-      projectTitle === "" ||
-      userName === "" ||
-      clientName === "" ||
-      ariaCircle === ""
-    ) {
-      console.log("helo");
-      setError(true);
-      return false;
+
+  const {
+    boq,
+    error,
+    nameForGP_user_id,
+    handleFormInput,
+    getGPUserId,
+    clientsIdWithName,
+    generateRandomId,
+  } = useBoqContext();
+
+  const handleKeyDown = (event) => {
+    if (!clientsIdWithName || clientsIdWithName.length === 0) return;
+
+    switch (event.key) {
+      case "ArrowDown":
+        setHighlightedIndex((prevIndex) =>
+          prevIndex < clientsIdWithName.length - 1 ? prevIndex + 1 : 0
+        );
+        break;
+      case "ArrowUp":
+        setHighlightedIndex((prevIndex) =>
+          prevIndex > 0 ? prevIndex - 1 : clientsIdWithName.length - 1
+        );
+        break;
+      case "Enter":
+        if (
+          highlightedIndex >= 0 &&
+          highlightedIndex < clientsIdWithName.length
+        ) {
+          console.log(clientsIdWithName[highlightedIndex]);
+          getGPUserId(clientsIdWithName[highlightedIndex].id); // Assuming the item has a 'name' property
+          // setAllProduct((prev) => [...prev, clientsIdWithName[highlightedIndex]]);
+          setIsFocused(false);
+        }
+        break;
+      case "Escape":
+        setIsFocused(false);
+        break;
+      default:
+        break;
     }
-    setError(false);
-    return true;
+  };
+  const handleItemClick = (item) => {
+    getGPUserId(item.id); // Adjust according to the structure of your data
+    setIsFocused(false);
   };
 
+  // console.log(clientsIdWithName);
   const hanleFormSubmit = (e) => {
     e.preventDefault();
-    navigate("createboq");
-    // if (validateProjectInfo()) {
-      // Proceed with form submission or other logic
+    console.log(boq);
+    // navigate("createboq");
+    // if (validateboq()) {
+    // Proceed with form submission or other logic
     //   console.log("Form is valid. Submitting...");
     // } else {
     //   console.log("Form is invalid. Please fill out all fields.");
     // }
   };
+  // const handleSearchChange = (e) => {
+  //   handleFormInput(e);
+  //   handleDropdown();
+  // };
+  // useEffect(() => {
+  //   handleDropdown();
+  // }, [nameForGP_user_id]);
+  // const handleDropdown = () => {
+  //   setTimeout(function () {
+  //     inputElement.current.size = clientsIdWithName.length + 1;
+  //   });
+  // };
+  // const handleCloseDropdown = () => {
+  //   setTimeout(function () {
+  //     // inputElement.current.size = 0;
+  //     inputElement.current.focus();
+  //   });
+  // };
   return (
     <div
-      className={`z-20 opacity-1 transition-all delay-300 bg-gray-900 absolute inset-0 flex justify-center items-center`}
+      className={`z-20 opacity-1 transition-all delay-300 bg-gray-900 absolute inset-0 flex justify-center items-center `}
     >
       <div className=" bg-black ">
         <div className="relative p-4 w-full max-w-md max-h-full">
@@ -59,7 +99,8 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
               </h3>
               {/* {console.log(handleCloseBOQ)} */}
               <button
-                onClick={() => handleCloseBOQ()}
+                // onClick={() => handleCloseBOQ()}
+                onClick={() => console.log(boq)}
                 type="button"
                 className="bg-transparent hover:bg-gray-200  text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  "
                 data-modal-toggle="crud-modal"
@@ -94,12 +135,12 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
                   </label>
                   <input
                     type="text"
-                    name="projectTitle"
+                    name="Project_name"
                     onChange={handleFormInput}
-                    value={projectInfo.projectTitle}
+                    value={boq.Project_name}
                     id="name"
                     className={`${
-                      projectInfo.projectTitle !== "" && error
+                      boq.Project_name !== "" && error
                         ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
@@ -107,7 +148,7 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
                     required=""
                   />
                 </div>
-                <div className="col-span-2 bg-black ">
+                <div className="col-span-2 bg-black sm:col-span-1">
                   <label
                     htmlFor="pName"
                     className="block mb-2 text-sm font-medium text-white "
@@ -116,18 +157,52 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
                   </label>
                   <input
                     type="text"
-                    name="userName"
+                    name="AEXP_BOQ_Creator"
                     onChange={handleFormInput}
-                    value={projectInfo.userName}
+                    value={boq.AEXP_BOQ_Creator}
                     id="pName"
                     className={`${
-                      projectInfo.userName !== "" && error
+                      boq.AEXP_BOQ_Creator !== "" && error
                         ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
                     placeholder="Type provider user name..."
                     required=""
                   />
+                </div>
+                <div className="col-span-2 bg-black sm:col-span-1">
+                  <label
+                    htmlFor="BOQ_ID"
+                    className="block mb-2 text-sm font-medium text-white "
+                  >
+                    Provider user name
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 right-0 flex items-center px-2">
+                      <button
+                        onClick={generateRandomId}
+                        type="button"
+                        title="search"
+                        className="p-1 focus:outline-none bg-green-500 rounded-md"
+                      >
+                        <MdAutorenew />
+                      </button>
+                    </span>
+                    <input
+                      type="text"
+                      name="BOQ_ID"
+                      onChange={handleFormInput}
+                      value={boq.BOQ_ID}
+                      id="BOQ_ID"
+                      className={`${
+                        boq.BOQ_ID !== "" && error
+                          ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                          : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      }`}
+                      placeholder="Type BOQ ID..."
+                      required=""
+                    />
+                  </div>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
@@ -136,15 +211,19 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
                   >
                     Client Name
                   </label>
-                  {console.log(error)}
+                  {/* {console.log(error)} */}
                   <input
                     type="text"
-                    name="clientName"
-                    onChange={handleFormInput}
-                    value={projectInfo.clientName}
+                    name="GP_user_id"
+                    onChange={(e) => handleFormInput(e)}
+                    onFocus={() => setIsFocused(true)}
+                    onKeyDown={handleKeyDown}
+                    onBlur={() => setIsFocused(false)}
+                    autoComplete="off"
+                    value={nameForGP_user_id}
                     id="client Name"
                     className={`${
-                      projectInfo.clientName !== "" && error
+                      nameForGP_user_id !== "" && error
                         ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
@@ -154,32 +233,58 @@ const CreateBoqPopUp = ({handleCloseBOQ}) => {
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label
-                    htmlFor="ariaCircle"
+                    htmlFor="GP_user_id"
                     className="block mb-2 text-sm font-medium  text-white "
                   >
-                    Aria Circle
+                    GP User Id
                   </label>
-                  <select
-                    id="ariaCircle"
-                    name="ariaCircle"
+                  {isFocused && clientsIdWithName.length && (
+                    <ul className="absolute z-50 bg-white border border-gray-300 w-[43%] rounded-md mt-1">
+                      {clientsIdWithName?.map((item, index) => (
+                        <li
+                          key={index}
+                          className={`p-2 cursor-pointer flex justify-start ${
+                            highlightedIndex === index
+                              ? "bg-gray-200 text-black"
+                              : ""
+                          }`}
+                          onMouseDown={() => handleItemClick(item)} // Use onMouseDown to avoid blur event
+                          onMouseEnter={() => setHighlightedIndex(index)}
+                        >
+                          {console.log(item)}
+                          <span className="text-black">
+                            {item.client_name}{" "}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {/* <select
+                    id="GP_user_id"
+                    name="GP_user_id"
+                    ref={inputElement}
                     onChange={handleFormInput}
-                    value={projectInfo.ariaCircle}
+                    value={nameForGP_user_id}
                     className={`${
-                      projectInfo.ariaCircle !== "" && error
+                      nameForGP_user_id !== "" && error
                         ? "cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                        : " border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 cursor-pointer focus:ring-primary-500 focus:border-primary-500 "
+                        : "absolute w-40 border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 cursor-pointer focus:ring-primary-500 focus:border-primary-500 "
                     }`}
-                    // className="cursor-pointer bg-gray-50 border border-gray-300  text-gray-800 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                   >
                     <option defaultValue="">Select Aria Circle</option>
-                    <option value="dhaka">Dhaka</option>
-                    <option value="chattogram">Chattogram</option>
-                    <option value="sylhet">Sylhet</option>
-                    <option value="khulna">Khulna</option>
-                    <option value="barishal">Barishal</option>
-                    <option value="rangpur">Rangpur</option>
-                    <option value="mymensingh">Mymensingh</option>
-                  </select>
+
+                    {clientsIdWithName?.map((item) => {
+                      return (
+                        <option
+                          className="flex justify-between"
+                          key={item.id}
+                          value={item.id}
+                        >
+                          {item.client_name} : {item.id}
+                        </option>
+                      );
+                    })}
+                  </select> */}
                 </div>
 
                 {/* <div className="col-span-2">
