@@ -18,6 +18,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
     getGPUserId,
     clientsIdWithName,
     generateRandomId,
+    validateboq,
   } = useBoqContext();
 
   const handleKeyDown = (event) => {
@@ -73,14 +74,11 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
   const hanleFormSubmit = (e) => {
     e.preventDefault();
     console.log(boq);
-    // navigate("createboq");
-    // if (validateboq()) {
-    // Proceed with form submission or other logic
-    //   console.log("Form is valid. Submitting...");
-    // } else {
-    //   console.log("Form is invalid. Please fill out all fields.");
-    // }
+    if (validateboq()) {
+      navigate("createboq");
+    }
   };
+  // console.log(error)
 
   return (
     <div
@@ -95,8 +93,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
               </h3>
               {/* {console.log(handleCloseBOQ)} */}
               <button
-                // onClick={() => handleCloseBOQ()}
-                onClick={() => console.log(boq)}
+                onClick={() => handleCloseBOQ()}
                 type="button"
                 className="bg-transparent hover:bg-gray-200  text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  "
                 data-modal-toggle="crud-modal"
@@ -137,12 +134,12 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                     value={boq.Project_name}
                     id="Project_name"
                     className={`${
-                      boq.Project_name !== "" && error
-                        ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      boq.Project_name === "" && error
+                        ? "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        : "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
                     placeholder="Type project name..."
-                    required=""
+                    required
                   />
                 </div>
                 <div className="col-span-2 bg-black sm:col-span-1">
@@ -160,9 +157,9 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                     value={boq.AEXP_BOQ_Creator}
                     id="AEXP_BOQ_Creator"
                     className={`${
-                      boq.AEXP_BOQ_Creator !== "" && error
-                        ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      boq.AEXP_BOQ_Creator === "" && error
+                        ? "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        : "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
                     placeholder="Type provider user name..."
                     required=""
@@ -194,12 +191,12 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                       value={boq.BOQ_ID}
                       id="BOQ_ID"
                       className={`${
-                        boq.BOQ_ID !== "" && error
-                          ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                          : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        boq.BOQ_ID === "" && error
+                          ? "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                          : "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       }`}
                       placeholder="Type BOQ ID..."
-                      required=""
+                      required
                     />
                   </div>
                 </div>
@@ -222,9 +219,9 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                     value={nameForGP_user_id}
                     id="client_Name"
                     className={`${
-                      nameForGP_user_id !== "" && error
-                        ? "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        : "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      nameForGP_user_id === "" && error
+                        ? "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                        : "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
                     placeholder="Enter name..."
                     required=""
@@ -243,7 +240,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                         <li
                           // id="GP_user_id"
                           key={index}
-                          className={`p-2 cursor-pointer flex justify-start ${
+                          className={`p-2 cursor-pointer flex justify-between  ${
                             highlightedIndex === index
                               ? "bg-gray-200 text-black"
                               : ""
@@ -255,6 +252,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                           <span className="text-black">
                             {item.client_name}{" "}
                           </span>
+                          <span className="text-black pr-2">{item.id} </span>
                         </li>
                       ))}
                     </ul>

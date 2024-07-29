@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BoqContext = createContext();
 
@@ -8,6 +9,7 @@ export const useBoqContext = () => {
 };
 
 const BoqContextProvider = ({ children }) => {
+  // const navigate = useNavigate()
   const [allBoq, setAllBoq] = useState([]);
   const [error, setError] = useState(false);
   const [nameForGP_user_id, setNameForGP_user_id] = useState("");
@@ -80,20 +82,24 @@ const BoqContextProvider = ({ children }) => {
     }
   };
   const validateboq = () => {
-    const { Project_name, AEXP_BOQ_Creator, GP_user_id, ariaCircle } = boq;
+    const { Project_name, AEXP_BOQ_Creator, GP_user_id, BOQ_ID } = boq;
     if (
       Project_name === "" ||
       AEXP_BOQ_Creator === "" ||
       GP_user_id === "" ||
-      ariaCircle === ""
+      BOQ_ID === ""
     ) {
-      console.log("helo");
+      // console.log("helo");
       setError(true);
       return false;
+    } else {
+      setError(false);
+      return true;
     }
-    setError(false);
-    return true;
   };
+
+ 
+
   const fetchBoq = () => {
     axios
       .get("/boq/all-boq")
@@ -114,6 +120,7 @@ const BoqContextProvider = ({ children }) => {
     nameForGP_user_id,
     generateRandomId,
     getGPUserId,
+    validateboq,
   };
   return <BoqContext.Provider value={value}>{children}</BoqContext.Provider>;
 };

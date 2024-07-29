@@ -62,7 +62,7 @@ const DashBoard = () => {
     setCreateBoqModal(true);
   };
   const handleCloseBOQ = () => {
-    setCreateBoqModal(false);
+    // setCreateBoqModal(false);
     setHistoryShow(false);
     setClientManagementShow(false);
     setCreateBoqModal(false);
@@ -86,7 +86,7 @@ const DashBoard = () => {
         "relative h-screen overflow-hidden"
       }`}
     >
-      {!createBoqModal && <CreateBoqPopUp handleCloseBOQ={handleCloseBOQ} />}
+      {createBoqModal && <CreateBoqPopUp handleCloseBOQ={handleCloseBOQ} />}
       {createClientModal && (
         <CreateClientPopUp
           handleCloseClient={handleCloseClient}
