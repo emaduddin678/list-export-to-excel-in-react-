@@ -4,8 +4,31 @@ import Test from "../ExcelSheet/ExcelFile";
 import axios from "axios";
 
 const SearchInput = () => {
+  // console.log("Hello")
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchedItem, setSearchedItem] = useState({});
+  // const [searchedItem, setSearchedItem] = useState({});
+  const [searchedItem, setSearchedItem] = useState({
+    ASF: "0%",
+    ASF_amount: 0,
+    SL_No: "",
+    UOM: "",
+    VAT_amount: "",
+    code: "",
+    created_at: null,
+    description: "",
+    forecast: "",
+    id: "",
+    item: "",
+    quantity: 0,
+    totalAmount: 0,
+    totalAmountWithASF: 0,
+    remark: "",
+    total_price_with_TAX_ASF_VAT: "",
+    unit_price_with_ASF: "",
+    unit_price_with_TAX_ASF_VAT: "",
+    unit_price_with_tax: 0,
+    updated_at: null,
+  });
   const [allProduct, setAllProduct] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -26,8 +49,16 @@ const SearchInput = () => {
         break;
       case "Enter":
         if (highlightedIndex >= 0 && highlightedIndex < data.length) {
-          // console.log(data[highlightedIndex]);
-          setSearchedItem(data[highlightedIndex]); // Assuming the item has a 'name' property
+          setSearchedItem({
+            remark: "",
+            totalAmount: data[highlightedIndex].unit_price_with_tax,
+            totalAmountWithASF: data[highlightedIndex].unit_price_with_ASF,
+            quantity: 1,
+            ...data[highlightedIndex],
+          });
+          // setSearchedItem((prev) => ({ ...prev, ...data[highlightedIndex] }));
+          // setSearchedItem(data[highlightedIndex]);
+          // Assuming the item has a 'name' property
           // setAllProduct((prev) => [...prev, data[highlightedIndex]]);
           setIsFocused(false);
         }
@@ -65,20 +96,6 @@ const SearchInput = () => {
       return num;
     }
   };
-  // changeStringIntoNumber("342,25");
-  // const { data, error } = useQuery({
-  //   queryKey: ["searchTerm", searchTerm],
-  //   queryFn: async () => {
-  //     console.log("hello");
-  //     const response = await axios.get(
-  //       `https://boq-backend.xri.com.bd/search-by-item-code/${searchTerm}`
-  //     );
-
-  //     return response.data;
-  //   },
-  //   enabled: !!searchTerm,
-  // });
-  // console.log(data);
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -93,17 +110,25 @@ const SearchInput = () => {
       setSearchTerm("");
     }
   };
+  // console.log(searchedItem);
   const handelQuantity = (event) => {
-    setSearchedItem((prev) => {
-      console.log(prev);
-      return {
-        ...prev,
-        quantity: event.target.value,
-        totalAmount: event.target.value * prev.price,
-        ac: (prev.acP * (event.target.value * prev.price)) / 100,
-      };
-    });
+    console.log(event.target.value);
+    if (event.target.value >= 0) {
+      setSearchedItem((prev) => {
+        return {
+          ...prev,
+          quantity: event.target.value,
+          totalAmount: event.target.value * prev.unit_price_with_tax,
+          totalAmountWithASF: event.target.value * prev.unit_price_with_ASF,
+          ASF_amount:
+            (prev.ASF.split("%")[0] *
+              (event.target.value * prev.unit_price_with_tax)) /
+            100,
+        };
+      });
+    }
   };
+  // console.log(searchedItem);
 
   const handleRemark = (event) => {
     setSearchedItem((prev) => {
@@ -114,7 +139,16 @@ const SearchInput = () => {
     });
   };
   const handleItemClick = (item) => {
-    setSearchedItem(item); // Adjust according to the structure of your data
+    // setSearchedItem(item);
+    // console.log(item.unit_price_with_ASF);
+    // Adjust according to the structure of your data
+    setSearchedItem({
+      remark: "",
+      totalAmount: item.unit_price_with_tax,
+      totalAmountWithASF: item.unit_price_with_ASF,
+      quantity: 1,
+      ...item,
+    });
     setIsFocused(false);
   };
 
@@ -232,7 +266,7 @@ const SearchInput = () => {
             min={1}
             value={
               Object.keys(searchedItem).length !== 0
-                ? searchedItem.quantity
+                ? searchedItem?.quantity
                 : ""
             }
             onChange={handelQuantity}
@@ -250,9 +284,7 @@ const SearchInput = () => {
             type="text"
             value={
               Object.keys(searchedItem).length !== 0
-                ? changeStringIntoNumber(
-                    searchedItem.unit_price_with_TAX_ASF_VAT
-                  )
+                ? `${searchedItem.unit_price_with_tax} BDT`
                 : "0.00 BDT"
             }
             readOnly={true}
@@ -260,24 +292,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
-        <div className="flex flex-col items-center font-medium">
-          <label htmlFor="totalRate" className="text-sm">
-            Total Amount
-          </label>
-          {console.log(searchedItem.totalAmount)}
-          <input
-            id="totalRate"
-            type="text"
-            value={
-              Object.keys(searchedItem).length !== 0
-                ? searchedItem.totalAmount
-                : "0.00 BDT"
-            }
-            readOnly={true}
-            disabled
-            className="w-full rounded-md focus:ring focus:ring-opacity-75 "
-          />
-        </div>
+
         <div className="flex flex-col items-center font-medium">
           <label htmlFor="acP" className="text-sm">
             AC %
@@ -306,11 +321,29 @@ const SearchInput = () => {
             disabled
             value={
               Object.keys(searchedItem).length !== 0
-                ? searchedItem.ASF_amount
+                ? `${searchedItem.ASF_amount} BDT`
                 : "0.00 BDT"
             }
             readOnly={true}
             placeholder="0.00 BDT"
+            className="w-full rounded-md focus:ring focus:ring-opacity-75 "
+          />
+        </div>
+        <div className="flex flex-col items-center font-medium">
+          <label htmlFor="totalRate" className="text-sm">
+            Total Amount
+          </label>
+          {/* {console.log(searchedItem)} */}
+          <input
+            id="totalRate"
+            type="text"
+            value={
+              Object.keys(searchedItem).length !== 0
+                ? `${searchedItem.totalAmount} BDT`
+                : "0.00 BDT"
+            }
+            readOnly={true}
+            disabled
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
@@ -323,7 +356,7 @@ const SearchInput = () => {
             type="text"
             placeholder="type a comment here..."
             value={
-              Object.keys(searchedItem).length !== 0 ? searchedItem.remark : ""
+              Object.keys(searchedItem).length !== 0 ? searchedItem?.remark : ""
             }
             onChange={handleRemark}
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "

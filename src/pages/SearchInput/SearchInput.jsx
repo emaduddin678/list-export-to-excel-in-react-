@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -7,6 +7,7 @@ const SearchInput = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
 
+  console.log("first");
   const handleKeyDown = (event) => {
     if (!data || data.length === 0) return;
 
@@ -107,6 +108,7 @@ const SearchInput = () => {
 
   //    fetchData();
   //  }, []);
+  console.log(searchedItem);
   return (
     <div>
       <form className="searchField flex gap-2 justify-between items-end">
@@ -276,6 +278,6 @@ const SearchInput = () => {
       <Test data={allProduct} />
     </div>
   );
-}
+};
 
-export default SearchInput
+export default SearchInput;
