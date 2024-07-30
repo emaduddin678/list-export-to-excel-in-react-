@@ -22,13 +22,13 @@ export function AuthProvider({ children }) {
   async function login(userInfo) {
     try {
       const response = await axios.post("/login", getFormData(userInfo));
+      if (response.status === 200) {
       console.log(response);
       localStorage.setItem("token", response.data.token);
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${response.data.token}`;
 
-      if (response.status === 200) {
         setCurrentUser(true)
         return true;
       }

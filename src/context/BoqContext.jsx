@@ -107,9 +107,9 @@ const BoqContextProvider = ({ children }) => {
       .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    fetchBoq();
-  }, []);
+  // useEffect(() => {
+  //   fetchBoq();
+  // }, []);
   const value = {
     allBoq,
     boq,

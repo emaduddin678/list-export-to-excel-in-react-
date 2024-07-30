@@ -14,10 +14,10 @@ const DashBoard = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  const { createClientModal, handleOpenClient, handleCloseClient } =
+  const { createClientModal, handleOpenClient, handleCloseClient, fetchUsers } =
     useClientContext();
-  const { allBoq } = useBoqContext();
-  console.log(allBoq);
+  const { allBoq, fetchBoq } = useBoqContext();
+  // console.log(allBoq);
 
   const [createBoqModal, setCreateBoqModal] = useState(false);
   const [clientManagementShow, setClientManagementShow] = useState(false);
@@ -29,6 +29,8 @@ const DashBoard = () => {
     if (mode === "dark") {
       document.body.classList.add("dark");
     }
+    fetchUsers();
+    fetchBoq();
     // const getStatus = localStorage.getItem("status") || "close";
     // if (getStatus === "close") {
     //   document.getElementById("navId").classList.toggle("close");
@@ -334,7 +336,7 @@ const DashBoard = () => {
                             <p>{item.AEXP_BOQ_Creator}</p>
                           </td>
                           <td className="p-3">
-                            {console.log(formateDate(item.created_at))}
+                            {/* {console.log(formateDate(item.created_at))} */}
                             <p>
                               {formateDate(item.created_at).split("UTC")[0]}
                             </p>

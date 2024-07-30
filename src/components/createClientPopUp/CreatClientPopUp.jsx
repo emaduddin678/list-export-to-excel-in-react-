@@ -3,16 +3,19 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useClientContext } from "../../context/ClientContext";
+import Swal from "sweetalert2";
 
 const CreateClientPopUp = () => {
   const [error, setError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const { handleCloseClient, prevClientData } = useClientContext();
   const [clientInfo, setClientInfo] = useState(prevClientData);
   console.log(clientInfo);
-  console.log(prevClientData);
+  // console.log(prevClientData);
 
   const navigate = useNavigate();
   const handleFormInput = (e) => {
+    setEmailError(false);
     setClientInfo((prev) => {
       return {
         ...prev,
@@ -20,6 +23,12 @@ const CreateClientPopUp = () => {
       };
     });
   };
+  const validateEmail = (email) => {
+    var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    
+    return re.test(email);
+  };
+  console.log(validateEmail(clientInfo.email_id));
   const validateProjectInfo = () => {
     const { client_name, department, circle, contact_number, email_id } =
       clientInfo;
@@ -27,9 +36,13 @@ const CreateClientPopUp = () => {
       client_name === "" ||
       department === "" ||
       contact_number === "" ||
-      email_id === ""
+      email_id === "" ||
+      validateEmail(email_id)
     ) {
       // console.log("helo");
+      if (!validateEmail(email_id)) {
+        setEmailError(true);
+      }
       setError(true);
       return false;
     }
@@ -45,30 +58,80 @@ const CreateClientPopUp = () => {
   const hanleFormSubmit = (e) => {
     e.preventDefault();
     if (validateProjectInfo()) {
+      console.log(clientInfo.id);
       if (clientInfo.id) {
-        axios
-          .post(`/client-user/update/${clientInfo.id}`, getFormData(clientInfo))
-          .then((res) => {
-            console.log(res.data);
-            handleCloseClient(false);
-            // handleOpenClient();
-            console.log("updated info ");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        Swal.fire({
+          title: "Do you want to create this user?",
+          text: "This user can create Project!",
+          icon: "question",
+          showCancelButton: true,
+          cancelButtonColor: "#d33",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Yes, create user!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios
+              .post(
+                `/client-user/update/${clientInfo.id}`,
+                getFormData(clientInfo)
+              )
+              .then((res) => {
+                console.log(res.data);
+                handleCloseClient(false);
+                Swal.fire({
+                  title: "Congretchulation!",
+                  text: "User updated successfully.",
+                  icon: "success",
+                });
+                // handleOpenClient();
+                console.log("updated info ");
+              })
+              .catch((err) => {
+                handleCloseClient(false);
+                Swal.fire({
+                  title: "Failed to update user.",
+                  text: err,
+                  icon: "error",
+                });
+                console.log(err);
+              });
+          }
+        });
       } else {
-        axios
-          .post("/client-user/create", getFormData(clientInfo))
-          .then((res) => {
-            console.log(res.data);
-            handleCloseClient(false);
-            // handleOpenClient();
-            console.log("Hello ");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        Swal.fire({
+          title: "Do you want to create this user?",
+          text: "This user can create Project!",
+          icon: "question",
+          showCancelButton: true,
+          cancelButtonColor: "#d33",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Yes, create user!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios
+              .post("/client-user/create", getFormData(clientInfo))
+              .then((res) => {
+                console.log(res.data);
+                handleCloseClient(false);
+                Swal.fire({
+                  title: "Congretchulation!",
+                  text: "User created successfully.",
+                  icon: "success",
+                });
+                // handleOpenClient();
+                console.log("Hello ");
+              })
+              .catch((err) => {
+                handleCloseClient(false);
+                Swal.fire({
+                  title: "Failed to create user.",
+                  text: err,
+                  icon: "error",
+                });
+                console.log(err);
+              });
+          }
+        });
       }
     } else {
       console.log("Form is invalid. Please fill out all fields.");
@@ -215,13 +278,18 @@ const CreateClientPopUp = () => {
                     value={clientInfo.email_id}
                     id="email_id"
                     className={`${
-                      clientInfo.email_id === "" && error
+                      clientInfo.email_id === "" && error && emailError
                         ? "border-2 border-red-500 bg-gray-50 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         : "bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     }`}
                     placeholder="Type email ..."
                     required=""
                   />
+                  {emailError && error ? (
+                    <p className="text-red-600">Email is not Valid!</p>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <label

@@ -28,19 +28,34 @@ const Login = () => {
 
     if (result) {
       console.log("Login success!");
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Successfully Logged In!",
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
         showConfirmButton: false,
-        timer: 2000,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
       });
+      Toast.fire({
+        icon: "success",
+        title: "Signed in successfully",
+      });
+      // Swal.fire({
+      //   position: "center",
+      //   icon: "success",
+      //   title: "Successfully Logged In!",
+      //   showConfirmButton: false,
+      //   timer: 2000,
+      // });
       navigate("/dashboard");
     } else {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "SAuthentication Fail!!",
+        text: "Credential doesn't match!!",
         footer: "Try Again",
       });
       setError(true);
@@ -68,7 +83,9 @@ const Login = () => {
           </div>
           <div>
             {error && (
-              <h1 className={classes.alertMessage}>Authentication Failed! </h1>
+              <h1 className={classes.alertMessage}>
+                Credential doesn't match!
+              </h1>
             )}
           </div>
 

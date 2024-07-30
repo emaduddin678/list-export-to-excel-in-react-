@@ -140,7 +140,7 @@ const ClientManagement = () => {
                     <td className="p-3 flex justify-between">
                       <span
                         onClick={() => handleOpenUpdateClient(item)}
-                        className="px-3 py-1 font-semibold rounded-md bg-violet-400 text-gray-900"
+                        className="cursor-pointer px-3 py-1 font-semibold rounded-md bg-violet-400 text-gray-900"
                       >
                         <span>Update</span>
                       </span>
