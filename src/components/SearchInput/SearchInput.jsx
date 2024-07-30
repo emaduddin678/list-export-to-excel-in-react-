@@ -186,7 +186,7 @@ const SearchInput = () => {
                   onMouseDown={() => handleItemClick(item)} // Use onMouseDown to avoid blur event
                   onMouseEnter={() => setHighlightedIndex(index)}
                 >
-                  <span>{item.item} </span>
+                  <span className="text-base">{item.item} </span>
                   <span>{item.code} </span>
                 </li>
               ))}

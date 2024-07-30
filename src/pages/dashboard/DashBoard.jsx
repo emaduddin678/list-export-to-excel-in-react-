@@ -283,17 +283,17 @@ const DashBoard = () => {
                 <div className="box box1">
                   <i className="uil uil-thumbs-up"></i>
                   <span className="text">Total Projects</span>
-                  <span className="number">512</span>
+                  <span className="number">8</span>
                 </div>
                 <div className="box box2">
                   <i className="uil uil-comments"></i>
-                  <span className="text">Comments</span>
-                  <span className="number">20,120</span>
+                  <span className="text">Total Clients</span>
+                  <span className="number">14</span>
                 </div>
                 <div className="box box3">
                   <i className="uil uil-share"></i>
-                  <span className="text">Total Share</span>
-                  <span className="number">10,120</span>
+                  <span className="text">Current Project</span>
+                  <span className="number">Nestle Event</span>
                 </div>
               </div>
             </div>
