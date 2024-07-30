@@ -3,13 +3,14 @@ import classes from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
   const navigate = useNavigate();
-  const { currentUser,login } = useAuth();
+  const { currentUser, login } = useAuth();
   // console.log(user);
 
   const handleChange = (e) => {
@@ -22,18 +23,29 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     const result = await login(userInfo);
-     console.log(currentUser,result);
+    const result = await login(userInfo);
+    console.log(currentUser, result);
 
-     if(result){
-      console.log("Login success!")
-        navigate("/dashboard");
-     }else{
-      setError(true)
-      console.log("Authentication Fail!")
-     }
-
-   
+    if (result) {
+      console.log("Login success!");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Successfully Logged In!",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      navigate("/dashboard");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "SAuthentication Fail!!",
+        footer: "Try Again",
+      });
+      setError(true);
+      console.log("Authentication Fail!");
+    }
   };
 
   return (
