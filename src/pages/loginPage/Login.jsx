@@ -29,6 +29,7 @@ const Login = () => {
       console.log("Login success!")
         navigate("/dashboard");
      }else{
+      setError(true)
       console.log("Authentication Fail!")
      }
 

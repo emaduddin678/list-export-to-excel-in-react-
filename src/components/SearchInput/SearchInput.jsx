@@ -45,16 +45,27 @@ const SearchInput = () => {
   const { data, error } = useQuery({
     queryKey: ["searchTerm", searchTerm],
     queryFn: async () => {
+      // console.log("Testin");
       const response = await axios.get(
-        `https://boq-backend.xri.com.bd/search-by-item-${
+        `/product/search-item-by-${
           Number.isInteger(searchTerm) ? "code" : "name"
         }/${searchTerm}`
       );
-
-      return response.data;
+      // console.log(response.data.data)
+      return response.data.data;
     },
     enabled: !!searchTerm,
   });
+  const changeStringIntoNumber = (num) => {
+    if (num.includes(",")) {
+      return Number(num.split(",").join(""));
+    } else if (typeof num === "string") {
+      return Number(num);
+    } else {
+      return num;
+    }
+  };
+  // changeStringIntoNumber("342,25");
   // const { data, error } = useQuery({
   //   queryKey: ["searchTerm", searchTerm],
   //   queryFn: async () => {
@@ -84,6 +95,7 @@ const SearchInput = () => {
   };
   const handelQuantity = (event) => {
     setSearchedItem((prev) => {
+      console.log(prev);
       return {
         ...prev,
         quantity: event.target.value,
@@ -116,6 +128,7 @@ const SearchInput = () => {
     }
   };
 
+  // console.log("searchedItem", searchedItem);
   // console.log(searchedItem);
   // console.log(allProduct);
 
@@ -135,7 +148,7 @@ const SearchInput = () => {
   //    fetchData();
   //  }, []);
   return (
-    <div className="mt-2">
+    <div className="mt-2 px-2">
       <form className="searchField flex gap-2 justify-between items-end ">
         <div className="flex flex-col items-center font-medium">
           <label htmlFor="itName" className="text-sm ">
@@ -148,7 +161,7 @@ const SearchInput = () => {
             placeholder="Search..."
             value={
               Object.keys(searchedItem).length !== 0 && !isFocused
-                ? searchedItem?.item_name
+                ? searchedItem?.item
                 : Number.isInteger(searchTerm)
                 ? !isFocused
                   ? "Search..."
@@ -163,7 +176,7 @@ const SearchInput = () => {
             className="w-full rounded-md focus:ring focus:ring-opacity-75  "
           />
           {isFocused && data && (
-            <ul className="absolute z-50 bg-white border border-gray-300 w-1/3 rounded-md mt-1">
+            <ul className="absolute top-[70px] left-2 z-50 bg-white border border-gray-300 w-1/3 rounded-md mt-1">
               {data.map((item, index) => (
                 <li
                   key={index}
@@ -173,8 +186,8 @@ const SearchInput = () => {
                   onMouseDown={() => handleItemClick(item)} // Use onMouseDown to avoid blur event
                   onMouseEnter={() => setHighlightedIndex(index)}
                 >
-                  <span>{item.item_name} </span>
-                  <span>{item.item_code} </span>
+                  <span>{item.item} </span>
+                  <span>{item.code} </span>
                 </li>
               ))}
             </ul>
@@ -188,6 +201,7 @@ const SearchInput = () => {
             id="itCode"
             type="number"
             // disabled
+            min={0}
             name="itCode"
             onChange={handleInputChangeNumber}
             onFocus={() => setIsFocused(true)}
@@ -196,12 +210,17 @@ const SearchInput = () => {
             autoComplete="off"
             value={
               Object.keys(searchedItem).length !== 0 && !isFocused
-                ? searchedItem?.item_code
+                ? changeStringIntoNumber(searchedItem.code)
                 : searchTerm
             }
             placeholder="Item Code"
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
+          {/* {console.log(
+            Object.keys(searchedItem).length !== 0 && !isFocused
+              ? parseInt(searchedItem.code)
+              : searchTerm
+          )} */}
         </div>
         <div className="flex flex-col items-center font-medium">
           <label htmlFor="itQuantity" className="text-sm">
@@ -229,11 +248,14 @@ const SearchInput = () => {
           <input
             id="unitRate"
             type="text"
-            placeholder={
+            value={
               Object.keys(searchedItem).length !== 0
-                ? searchedItem.price
+                ? changeStringIntoNumber(
+                    searchedItem.unit_price_with_TAX_ASF_VAT
+                  )
                 : "0.00 BDT"
             }
+            readOnly={true}
             disabled
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
@@ -242,14 +264,16 @@ const SearchInput = () => {
           <label htmlFor="totalRate" className="text-sm">
             Total Amount
           </label>
+          {console.log(searchedItem.totalAmount)}
           <input
             id="totalRate"
             type="text"
-            placeholder={
+            value={
               Object.keys(searchedItem).length !== 0
                 ? searchedItem.totalAmount
                 : "0.00 BDT"
             }
+            readOnly={true}
             disabled
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
@@ -264,11 +288,11 @@ const SearchInput = () => {
             placeholder="5%"
             value={
               Object.keys(searchedItem).length !== 0
-                ? `${searchedItem?.acP}%`
+                ? `${searchedItem?.ASF}`
                 : "5%"
             }
             disabled
-            // onChange={handelAcP}
+            readOnly={true}
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
         </div>
@@ -282,9 +306,10 @@ const SearchInput = () => {
             disabled
             value={
               Object.keys(searchedItem).length !== 0
-                ? searchedItem.ac
+                ? searchedItem.ASF_amount
                 : "0.00 BDT"
             }
+            readOnly={true}
             placeholder="0.00 BDT"
             className="w-full rounded-md focus:ring focus:ring-opacity-75 "
           />
