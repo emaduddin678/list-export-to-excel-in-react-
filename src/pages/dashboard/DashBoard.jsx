@@ -7,6 +7,8 @@ import CreateClientPopUp from "../../components/createClientPopUp/CreatClientPop
 import { useClientContext } from "../../context/ClientContext";
 import { useAuth } from "../../context/AuthContext";
 import HistoryPage from "../historyPage/HistoryPage";
+import { useBoqContext } from "../../context/BoqContext";
+import formateDate from "../../utility/getFormattedDate";
 
 const DashBoard = () => {
   const navigate = useNavigate();
@@ -14,6 +16,8 @@ const DashBoard = () => {
 
   const { createClientModal, handleOpenClient, handleCloseClient } =
     useClientContext();
+  const { allBoq } = useBoqContext();
+  console.log(allBoq);
 
   const [createBoqModal, setCreateBoqModal] = useState(false);
   const [clientManagementShow, setClientManagementShow] = useState(false);
@@ -293,7 +297,7 @@ const DashBoard = () => {
                 <div className="box box3">
                   <i className="uil uil-share"></i>
                   <span className="text">Current Project</span>
-                  <span className="number">Nestle Event</span>
+                  <span className="number">6</span>
                 </div>
               </div>
             </div>
@@ -303,7 +307,50 @@ const DashBoard = () => {
                 <span className="text">Recent Activity</span>
               </div>
               <div className="activity-data">
-                <div className="data names">
+                <table className="min-w-full text-xs">
+                  <thead className="">
+                    <tr className="text-left">
+                      <th className="p-3">Project Name</th>
+                      <th className="p-3">Client Name</th>
+                      <th className="p-3">Provider Name</th>
+                      <th className="p-3">Created At</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allBoq.length > 0 ? (
+                      allBoq.map((item) => (
+                        <tr
+                          key={item.id}
+                          className="border-b border-opacity-20 border-gray-700 "
+                        >
+                          {/* {console.log(item)} */}
+                          <td className="p-3">
+                            <p>{item.Project_name}</p>
+                          </td>
+                          <td className="p-3">
+                            <p>{item.GP_user_name}</p>
+                          </td>
+                          <td className="p-3">
+                            <p>{item.AEXP_BOQ_Creator}</p>
+                          </td>
+                          <td className="p-3">
+                            {console.log(formateDate(item.created_at))}
+                            <p>
+                              {formateDate(item.created_at).split("UTC")[0]}
+                            </p>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="p-3 text-center bg-gray-700">
+                          No data available
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+                {/* <div className="data names">
                   <span className="data-title">Name</span>
                   <span className="data-list">project name</span>
                   <span className="data-list">project name</span>
@@ -352,7 +399,7 @@ const DashBoard = () => {
                   <span className="data-list">Liked</span>
                   <span className="data-list">Liked</span>
                   <span className="data-list">Liked</span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
