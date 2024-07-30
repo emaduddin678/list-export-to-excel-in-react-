@@ -25,27 +25,27 @@ function App() {
             <Route
               index
               element={
-                // <PrivateRoute>
+                <PrivateRoute>
                   <DashBoard />
-                // </PrivateRoute>
+                </PrivateRoute>
               }
             />
             <Route
               path="createboq"
               element={
-                // <PrivateRoute>
+                <PrivateRoute>
                   <SearchInput />
-                // </PrivateRoute>
+                </PrivateRoute>
               }
             />
-            {/* <Route
+            <Route
               path="history"
               element={
-                // <PrivateRoute>
+                <PrivateRoute>
                   <HistoryPage />
-                // </PrivateRoute>
+                </PrivateRoute>
               }
-            /> */}
+            />
           </Route>
         </Route>
         <Route path="*" element={<ErrorPage />} />
