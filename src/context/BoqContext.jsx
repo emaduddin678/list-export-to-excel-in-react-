@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import getFormData from "../utility/getFormData";
 
 const BoqContext = createContext();
 
@@ -14,6 +15,7 @@ const BoqContextProvider = ({ children }) => {
   const [error, setError] = useState(false);
   const [nameForGP_user_id, setNameForGP_user_id] = useState("");
   const [clientsIdWithName, setClientsIdWithName] = useState([]);
+  const [allProduct, setAllProduct] = useState([]);
   const [boq, setBoq] = useState({
     Project_name: "",
     AEXP_BOQ_Creator: "",
@@ -98,9 +100,33 @@ const BoqContextProvider = ({ children }) => {
     }
   };
 
- const createBoq = () =>{
-  console.log(boq)
- }
+  const createBoq = (searchedItem) => {
+    if (Object.keys(searchedItem).length !== 0) {
+      setAllProduct((prev) => [...prev, searchedItem]);
+    }
+  };
+  useEffect(() => {
+    setBoq((prev) => ({
+      ...prev,
+      BOQ: allProduct,
+    }));
+  }, [allProduct]);
+
+  useEffect(() => {
+    getFormData(boq, true);
+    if (
+      boq.AEXP_BOQ_Creator !== "" &&
+      boq.Project_name !== "" &&
+      boq.GP_user_id !== "" &&
+      boq.BOQ.length !== 0 &&
+      boq.BOQ_ID !== ""
+    ) {
+      axios
+        .post("/boq/create", getFormData(boq, true))
+        .then((res) => console.log(res.data.data))
+        .catch((err) => console.log(err));
+    }
+  }, [boq]);
 
   const fetchBoq = () => {
     axios
@@ -123,7 +149,9 @@ const BoqContextProvider = ({ children }) => {
     generateRandomId,
     getGPUserId,
     validateboq,
+
     createBoq,
+    allProduct,
   };
   return <BoqContext.Provider value={value}>{children}</BoqContext.Provider>;
 };

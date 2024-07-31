@@ -209,7 +209,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                   >
                     Client Name
                   </label>
-                  {console.log(clientsIdWithName)}
+                  {/* {console.log(clientsIdWithName)} */}
                   <input
                     type="text"
                     name="client_Name"

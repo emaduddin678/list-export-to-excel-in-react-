@@ -7,9 +7,10 @@ const Test = ({ data }) => {
 
   const [sumOfTotal, setSumOfTotal] = useState(0);
   const [sumOfAgencyCommission, setSumOfAgencyCommission] = useState(0);
-  const [grandTotal, setGrandTotal] = useState(0);
+  // const [grandTotal, setGrandTotal] = useState(0);
   const [agencyCommisionRow, setAgencyCommisionRow] = useState([]);
   // let agencyCommisionRow;
+  // console.log(data)
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
@@ -17,92 +18,7 @@ const Test = ({ data }) => {
     sheet: "BOQSheet",
   });
 
-  // const data = [
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: "2",
-  //     totalAmount: 1000,
-  //     ASF: 6,
-  //     ac: 60,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: "2",
-  //     totalAmount: 1000,
-  //     ASF: 7,
-  //     ac: 70,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: "2",
-  //     totalAmount: 1000,
-  //     ASF: 8,
-  //     ac: 80,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: "2",
-  //     totalAmount: 1000,
-  //     ASF: 6,
-  //     ac: 60,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: "2",
-  //     totalAmount: 1000,
-  //     ASF: 7,
-  //     ac: 70,
-  //     remark: "",
-  //   },
-  //   {
-  //     id: 199,
-  //     item_code: "40015023",
-  //     item_name: "SHIRT - HALF SLEEVE_EA_DHAKA",
-  //     supplier: "ASIATIC EXPERIENTIAL MARKETING LIMITED",
-  //     price: 270,
-  //     contact: "17318",
-  //     currency: "BDT",
-  //     quantity: "2",
-  //     totalAmount: 1000,
-  //     ASF: 8,
-  //     ac: 80,
-  //     remark: "",
-  //   },
-  // ];
+  
   function findAllElements(arr) {
     const elementGroups = {};
     const result = [];
@@ -129,13 +45,12 @@ const Test = ({ data }) => {
     setSumOfAgencyCommission(0);
     data.forEach((dt) => {
       // console.log(dt.totalAmount);
-      setSumOfTotal((prev) => prev + dt.totalAmount);
-      setSumOfAgencyCommission((prev) => prev + dt.ASF_amount);
+      setSumOfTotal((prev) => prev + Number(dt.totalAmount));
+      setSumOfAgencyCommission((prev) => prev + Number(dt.ASF_amount));
     });
-    // setGrandTotal(sumOfAgencyCommission + sumOfTotal);
-    // console.log(sumOfTotal, "useEffct=>", sumOfAgencyCommission);
+
   }, [data]);
-  // console.log(sumOfAgencyCommission, "===>", sumOfTotal);
+  
   const prevDataRef = useRef();
 
   const memoizedData = useMemo(() => data, [data]);
@@ -421,7 +336,7 @@ const Test = ({ data }) => {
                     {removeZero(
                       row.reduce(
                         (accumulator, currentValue) =>
-                          accumulator + currentValue.totalAmount,
+                          accumulator + Number(currentValue.totalAmount),
                         0
                       )
                     )}
@@ -445,7 +360,7 @@ const Test = ({ data }) => {
                     {(
                       row.reduce(
                         (accumulator, currentValue) =>
-                          accumulator + currentValue.totalAmount,
+                          accumulator + Number(currentValue.totalAmount),
                         0
                       ) *
                       (row[0].ASF.split("%")[0] / 100)

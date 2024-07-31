@@ -30,11 +30,11 @@ const SearchInput = () => {
     unit_price_with_tax: 0,
     updated_at: null,
   });
-  const [allProduct, setAllProduct] = useState([]);
+  
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
 
-  const { createBoq } = useBoqContext();
+  const { createBoq, allProduct } = useBoqContext();
 
   const handleKeyDown = (event) => {
     if (!data || data.length === 0) return;
@@ -157,7 +157,9 @@ const SearchInput = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    createBoq();
+    createBoq(searchedItem);
+    setSearchTerm("");
+    setSearchedItem({});
 
     // if (Object.keys(searchedItem).length !== 0) {
     //   setAllProduct((prev) => [...prev, searchedItem]);
