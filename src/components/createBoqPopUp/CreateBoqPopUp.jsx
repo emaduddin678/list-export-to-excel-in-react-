@@ -7,6 +7,7 @@ import { MdAutorenew } from "react-icons/md";
 const CreateBoqPopUp = ({ handleCloseBOQ }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [gpClientName,setGpClientName ] = useState({})
   const [changing, setChanging] = useState(false);
   const navigate = useNavigate();
 
@@ -66,6 +67,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
   };
 
   const handleItemClick = (item) => {
+    setGpClientName(item);
     getGPUserId(item.id); // Adjust according to the structure of your data
     setIsFocused(false);
   };
@@ -170,7 +172,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                     htmlFor="BOQ_ID"
                     className="block mb-2 text-sm font-medium text-white "
                   >
-                    Provider user name
+                    Provider code
                   </label>
                   <div className="relative">
                     <span className="absolute inset-y-0 right-0 flex items-center px-2">
@@ -207,7 +209,7 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                   >
                     Client Name
                   </label>
-                  {/* {console.log(error)} */}
+                  {console.log(clientsIdWithName)}
                   <input
                     type="text"
                     name="client_Name"
@@ -216,7 +218,11 @@ const CreateBoqPopUp = ({ handleCloseBOQ }) => {
                     onKeyDown={handleKeyDown}
                     onBlur={() => handleOnBlur()}
                     autoComplete="off"
-                    value={nameForGP_user_id}
+                    value={
+                      gpClientName?.client_name
+                        ? gpClientName?.client_name
+                        : nameForGP_user_id
+                    }
                     id="client_Name"
                     className={`${
                       nameForGP_user_id === "" && error

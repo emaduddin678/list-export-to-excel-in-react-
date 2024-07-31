@@ -98,7 +98,9 @@ const BoqContextProvider = ({ children }) => {
     }
   };
 
- 
+ const createBoq = () =>{
+  console.log(boq)
+ }
 
   const fetchBoq = () => {
     axios
@@ -121,6 +123,7 @@ const BoqContextProvider = ({ children }) => {
     generateRandomId,
     getGPUserId,
     validateboq,
+    createBoq,
   };
   return <BoqContext.Provider value={value}>{children}</BoqContext.Provider>;
 };

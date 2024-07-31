@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import Test from "../ExcelSheet/ExcelFile";
 import axios from "axios";
+import { useBoqContext } from "../../context/BoqContext";
 
 const SearchInput = () => {
   // console.log("Hello")
@@ -32,6 +33,8 @@ const SearchInput = () => {
   const [allProduct, setAllProduct] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+
+  const { createBoq } = useBoqContext();
 
   const handleKeyDown = (event) => {
     if (!data || data.length === 0) return;
@@ -154,12 +157,13 @@ const SearchInput = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // console.log("hello");
-    if (Object.keys(searchedItem).length !== 0) {
-      setAllProduct((prev) => [...prev, searchedItem]);
-      setSearchTerm("");
-      setSearchedItem({});
-    }
+    createBoq();
+
+    // if (Object.keys(searchedItem).length !== 0) {
+    //   setAllProduct((prev) => [...prev, searchedItem]);
+    //   setSearchTerm("");
+    //   setSearchedItem({});
+    // }
   };
 
   // console.log("searchedItem", searchedItem);
