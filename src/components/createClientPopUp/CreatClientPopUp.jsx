@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useClientContext } from "../../context/ClientContext";
 import Swal from "sweetalert2";
+import getFormData from "../../utility/getFormData";
 
 const CreateClientPopUp = () => {
   const [error, setError] = useState(false);
@@ -50,11 +51,7 @@ const CreateClientPopUp = () => {
     return true;
   };
 
-  function getFormData(object) {
-    const formData = new FormData();
-    Object.keys(object).forEach((key) => formData.append(key, object[key]));
-    return formData;
-  }
+ 
   const hanleFormSubmit = (e) => {
     e.preventDefault();
     if (validateProjectInfo()) {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import getFormData from "../utility/getFormData";
 
 const AuthContext = React.createContext();
 
@@ -13,11 +14,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(false);
   // const [createClientModal, setCreateClientModal] = useState(false);
 
-  function getFormData(object) {
-    const formData = new FormData();
-    Object.keys(object).forEach((key) => formData.append(key, object[key]));
-    return formData;
-  }
+
   // login function
   async function login(userInfo) {
     try {
